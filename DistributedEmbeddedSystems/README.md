@@ -1,5 +1,15 @@
 # **Distributed Embedded Systems**
 
+## Compilation
+To compile the program run the following commands on the terminal:
+```bash
+mkdir build
+cd build
+cmake ..
+make
+./executable
+```
+
 Distributed embedded systems in the mobility industry are complex systems that combine hardware, software, and networking components to create advanced and highly integrated systems for vehicles. These systems typically include a wide range of components, including microcontrollers, sensors, actuators, and communication networks.
 
 One of the key features of distributed embedded systems is their use of multiple microcontrollers, each of which is responsible for a specific function or task. For example, one microcontroller may be responsible for controlling the engine, while another may be responsible for controlling the infotainment system. These microcontrollers are connected through a communication network, such as Controller Area Network (CAN) or Local Interconnect Network (LIN), which enables them to exchange data and collaborate to achieve the desired behavior of the vehicle.
