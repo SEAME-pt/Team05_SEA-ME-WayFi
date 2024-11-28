@@ -32,10 +32,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(52, 52, 53);
-border-color: rgb(52, 52, 53);
-gridline-color: rgb(52, 52, 53);
-</string>
+   <string notr="true">background-color: rgb(52, 52, 53)</string>
   </property>
   <widget class="QWidget" name="widget">
    <property name="sizePolicy">
@@ -77,6 +74,32 @@ gridline-color: rgb(52, 52, 53);
    <property name="styleSheet">
     <string notr="true">background-color: rgb(205, 171, 143);</string>
    </property>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>152</y>
+      <width>501</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>24</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QDial" name="dial">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>130</y>
+      <width>291</width>
+      <height>221</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

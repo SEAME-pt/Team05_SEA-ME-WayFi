@@ -25,7 +25,7 @@ void Speedometer::paintEvent(QPaintEvent *) {
     painter.setRenderHint(QPainter::Antialiasing); // better image
 
     //draw circle
-    QPen pen1(Qt::black, 3);
+    QPen pen1(Qt::black, 1);
     painter.setPen(pen1);
     QRectF rect(0, 0, width() - 30, height() - 30);
     painter.drawEllipse(rect);
@@ -39,26 +39,14 @@ void Speedometer::paintEvent(QPaintEvent *) {
         painter.setPen(pen2);
         painter.drawLine(0, -rect.height() / 2, 0, -(rect.height() / 2) + 10);
 
-        // painter.restore();
-        // painter.save();
         painter.setPen(Qt::white);
         painter.setFont(QFont("Arial", 12));
-//         if (i % 20 == 0) {  // Show a number every 20 ticks (for readability)
-//             //painter.drawText(10, -(rect.height() / 2) + 15, QString::number(i));  // Adjust the text position
-//             double angle = 240.0 + (i / 200.0) * 270.0;  // Start at 8 o'clock, adjusting the angle
-//             QPointF textPos = rect.center() + QPointF(
-//                 (rect.width() / 2 - 15) * cos(qDegreesToRadians(angle)),
-//                 (rect.height() / 2 - 15) * sin(qDegreesToRadians(angle))
-// );
-            QPointF textPos = rect.center() + QPointF(
-    (rect.width() / 2 - 15) * cos(qDegreesToRadians(-135.0 + (i / 200.0) * 270.0)),
-    (rect.height() / 2 - 15) * sin(qDegreesToRadians(-135.0 + (i / 200.0) * 270.0))
-    );
-            painter.drawText(textPos, QString::number(i));
+        if (i % 20 == 0) {  // Show a number every 20 ticks (for readability)
+            painter.drawText(10, -(rect.height() / 2) + 15, QString::number(i));
         }
         painter.restore();
-        //i+= 9;
-    //}
+        i+= 9;
+    }
 
     //draw needle
     painter.save();
