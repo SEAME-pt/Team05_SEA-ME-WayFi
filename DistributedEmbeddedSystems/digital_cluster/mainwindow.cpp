@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
 
-    QString program = "./get_speed.sh";
+    QString program = "../get_speed.sh";
     QStringList arguments;  // Add any necessary arguments if required
     process->start(program, arguments);
 }
@@ -44,7 +44,6 @@ void MainWindow::read_speed() {
     QByteArray output = get_process()->readAllStandardOutput();
     bool ok;
     int speed = output.toInt(&ok);
-    std::cout << ok << std::endl;
 
     if (ok) {
         set_speed(speed);
