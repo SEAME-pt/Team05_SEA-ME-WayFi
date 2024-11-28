@@ -1,7 +1,6 @@
 #!/bin/bash
-while true; do
-    # Simulate getting speed (replace with actual command)
-    echo $((RANDOM % 100))
-    sleep 0,5
+end=$((SECONDS+20)) # Stop after 10 seconds
+while [ $SECONDS -lt $end ]; do
+    echo $((RANDOM % 200))
+    sleep 0.5
 done
-

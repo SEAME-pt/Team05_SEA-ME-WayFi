@@ -32,7 +32,10 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(52, 52, 53)</string>
+   <string notr="true">background-color: rgb(52, 52, 53);
+border-color: rgb(52, 52, 53);
+gridline-color: rgb(52, 52, 53);
+</string>
   </property>
   <widget class="QWidget" name="widget">
    <property name="sizePolicy">
@@ -69,7 +72,7 @@
     <enum>Qt::LeftToRight</enum>
    </property>
    <property name="autoFillBackground">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(205, 171, 143);</string>

@@ -1,18 +1,41 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QLCDNumber>
+#include <iostream>
+#include <QVBoxLayout>
+#include <QLabel>
 
+
+
+// Speedometer is a QObject-based class, pass the this pointer (or an appropriate parent) to its constructor
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , process(new QProcess(this))
+    , speed(new Speedometer(this))
 {
     ui->setupUi(this);
-    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
+    QVBoxLayout *layout = new QVBoxLayout(); // Create a new layout
+    QLabel *title = new QLabel("Speedometer", this); // Create the label
+    QFont font = title->font(); // Get the current font
+    font.setPointSize(24); // Set the font size
+    font.setBold(true); 
+    title->setFont(font);
+    QPalette palette;
+    palette.setColor(QPalette::WindowText, Qt::white);  // Set text color to light gray
+    title->setPalette(palette);
+    layout->addWidget(title, 0, Qt::AlignCenter); // Add the label to the layout
+    layout->addWidget(speed, 0, Qt::AlignCenter); // Add the speedometer widget
 
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setLayout(layout);
+    setCentralWidget(centralWidget);
+    speed->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    speed->setMinimumSize(400, 400);  // Set a minimum size for the widget
+
+    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
     QString program = "../get_speed.sh";
-    QStringList arguments;  // Add any necessary arguments if required
-    process->start(program, arguments);
+    process->start(program);
 }
 
 MainWindow::~MainWindow()
@@ -28,17 +51,14 @@ QProcess *MainWindow::get_process(void) {
     return process;
 }
 
-int MainWindow::get_speed() {
+Speedometer* MainWindow::get_speed() {
     return speed;
 }
 
-void MainWindow::set_speed(int speed1) {
-    speed = speed1;
-}
 
-void MainWindow::update_speed_display() {
-    get_ui()->lcdNumber->display(get_speed());
-}
+// void MainWindow::update_speed_display() {
+//     get_ui()->lcdNumber->display(get_speed());
+// }
 
 void MainWindow::read_speed() {
     QByteArray output = get_process()->readAllStandardOutput();
@@ -46,9 +66,10 @@ void MainWindow::read_speed() {
     int speed = output.toInt(&ok);
 
     if (ok) {
-        set_speed(speed);
-        update_speed_display();
+        get_speed()->set_speed(speed);
+        // update_speed_display();
     } else {
         std::cerr << "Error reading speed data\n";
+        return ;
     }
 }
