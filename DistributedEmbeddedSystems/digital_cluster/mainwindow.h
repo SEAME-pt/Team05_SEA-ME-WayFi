@@ -5,9 +5,9 @@
 #include <cstdio>
 #include <QTimer>
 #include <QProcess>
+#include <iostream>
 #include <cstdlib>
 #include <QDebug>
-#include "speedometer.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -24,15 +24,15 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    //void update_speed_display();
     void read_speed();
-    Speedometer * get_speed();
     Ui::MainWindow *get_ui(void);
     QProcess *get_process(void);
+
+private slots:
+    void on_dial_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
     QProcess *process;
-    Speedometer *speed;
 };
 #endif // MAINWINDOW_H

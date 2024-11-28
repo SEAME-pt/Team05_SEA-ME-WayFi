@@ -6,24 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1081</width>
-    <height>606</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>1081</width>
-    <height>606</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>1081</width>
-    <height>606</height>
-   </size>
-  </property>
-  <property name="focusPolicy">
-   <enum>Qt::WheelFocus</enum>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -32,47 +17,83 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(52, 52, 53)</string>
+   <string notr="true">background-color: rgb(4, 2, 54);
+border-color: rgb(4, 2, 54);
+gridline-color:rgb(4, 2, 54);
+</string>
   </property>
-  <widget class="QWidget" name="widget">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
-     <horstretch>1</horstretch>
-     <verstretch>1</verstretch>
-    </sizepolicy>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">
+background-color: rgb(4, 2, 54);
+border-color: rgb(4, 2, 54);
+gridline-color:rgb(4, 2, 54);</string>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>1081</width>
-     <height>606</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>1081</width>
-     <height>606</height>
-    </size>
-   </property>
-   <property name="sizeIncrement">
-    <size>
-     <width>1</width>
-     <height>1</height>
-    </size>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::DefaultContextMenu</enum>
-   </property>
-   <property name="toolTipDuration">
-    <number>1</number>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="autoFillBackground">
-    <bool>true</bool>
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="4,1">
+    <property name="spacing">
+     <number>5</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetNoConstraint</enum>
+    </property>
+    <property name="topMargin">
+     <number>50</number>
+    </property>
+    <property name="bottomMargin">
+     <number>1</number>
+    </property>
+    <item>
+     <widget class="QDial" name="dial">
+      <property name="maximum">
+       <number>60</number>
+      </property>
+      <property name="notchesVisible">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <pointsize>27</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Speed: 0 m/s</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(205, 171, 143);</string>
+    <string notr="true">background-color: rgb(4, 2, 54);
+border-color: rgb(4, 2, 54);
+gridline-color: rgb(4, 2, 54);
+</string>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(4, 2, 54);
+border-color: rgb(4, 2, 54);
+gridline-color:rgb(4, 2, 54);
+</string>
    </property>
   </widget>
  </widget>
