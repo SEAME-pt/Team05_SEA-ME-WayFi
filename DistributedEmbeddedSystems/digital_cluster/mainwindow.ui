@@ -45,7 +45,7 @@ gridline-color:rgb(4, 2, 54);</string>
     <item>
      <widget class="QDial" name="dial">
       <property name="maximum">
-       <number>60</number>
+       <number>180</number>
       </property>
       <property name="notchesVisible">
        <bool>true</bool>
@@ -63,7 +63,7 @@ gridline-color:rgb(4, 2, 54);</string>
        <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>Speed: 0 m/h</string>
+       <string>0 m/m</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

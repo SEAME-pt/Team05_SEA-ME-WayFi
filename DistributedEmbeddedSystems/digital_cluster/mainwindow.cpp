@@ -32,7 +32,7 @@ void MainWindow::read_speed() {
     bool ok;
     int speed = output.toInt(&ok);
     if (ok) {
-        get_ui()->label->setText(QString("Speed: %1 m/h").arg(speed));
+        get_ui()->label->setText(QString("%1 m/m").arg(speed));
         get_ui()->dial->setValue(speed);
     } else {
         std::cerr << "Error reading speed data\n";
@@ -41,6 +41,6 @@ void MainWindow::read_speed() {
 
 void MainWindow::on_dial_valueChanged(int value)
 {
-    get_ui()->label->setText(QString("Speed: %1 m/h").arg(value));
+    get_ui()->label->setText(QString("%1 m/m").arg(value));
 }
 

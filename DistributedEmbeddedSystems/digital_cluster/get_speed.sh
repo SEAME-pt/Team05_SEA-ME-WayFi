@@ -1,6 +1,6 @@
 #!/bin/bash
-end=$((SECONDS+20)) # Stop after 10 seconds
+end=$((SECONDS+40)) # Stop after x seconds
 while [ $SECONDS -lt $end ]; do
-    echo $((RANDOM % 60))
+    echo $((RANDOM % 180))
     sleep 0.5
 done
