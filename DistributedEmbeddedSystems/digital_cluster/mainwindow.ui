@@ -63,7 +63,7 @@ gridline-color:rgb(4, 2, 54);</string>
        <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>Speed: 0 m/s</string>
+       <string>Speed: 0 m/h</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
