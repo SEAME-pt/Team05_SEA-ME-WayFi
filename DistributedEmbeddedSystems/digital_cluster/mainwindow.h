@@ -7,7 +7,8 @@
 #include <QProcess>
 #include <iostream>
 #include <cstdlib>
-#include <QDebug>
+#include <QThread>
+#include "customdial.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -25,14 +26,11 @@ public:
     ~MainWindow();
 
     void read_speed();
-    Ui::MainWindow *get_ui(void);
-    QProcess *get_process(void);
-
-private slots:
-    void on_dial_valueChanged(int value);
+    void init();
 
 private:
-    Ui::MainWindow *ui;
+    //Ui::MainWindow *ui;
     QProcess *process;
+    CustomDial *custom_dial;
 };
 #endif // MAINWINDOW_H

@@ -1,46 +1,66 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+//#include "./ui_mainwindow.h"
+#include <QDir>
+#include <QVBoxLayout>
+#include <QCoreApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
     , process(new QProcess(this))
+    , custom_dial(new CustomDial(this))
 {
-    ui->setupUi(this);
-    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
-    connect(ui->dial, &QDial::valueChanged, this, &MainWindow::on_dial_valueChanged);
+    setStyleSheet("background-color: rgb(4, 2, 54);");
+    custom_dial->setFixedSize(500, 500);
+    // Set up the layout
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(custom_dial, 0, Qt::AlignCenter);
 
-    QString program = "../get_speed.sh";
-    process->start(program);
+    // Create a central widget and set it
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setLayout(layout);
+    setCentralWidget(centralWidget);
+    connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
+
+    QTimer::singleShot(0, this, &MainWindow::init);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    //delete ui;
+    delete process;
+    delete custom_dial;
 }
 
-Ui::MainWindow *MainWindow::get_ui(void) {
-    return ui;
-}
+void MainWindow::init() {
+    QString app = QCoreApplication::applicationDirPath();
+    QString script = QDir(app).filePath("../get_speed.sh");
+    script = QDir::cleanPath(script);
 
-QProcess *MainWindow::get_process(void) {
-    return process;
-}
+    if (!QFile::exists(script)) {
+        std::cerr << "Script not found" << std::endl;
+        return;
+    }
+    QStringList arguments;
+    process->start(script, arguments);
 
-void MainWindow::read_speed() {
-    QByteArray output = get_process()->readAllStandardOutput();
-    bool ok;
-    int speed = output.toInt(&ok);
-    if (ok) {
-        get_ui()->label->setText(QString("%1 m/m").arg(speed));
-        get_ui()->dial->setValue(speed);
-    } else {
-        std::cerr << "Error reading speed data\n";
+    if (!process->waitForStarted()) {
+        std::cerr << "Failed to start process!" << std::endl;
     }
 }
 
-void MainWindow::on_dial_valueChanged(int value)
-{
-    get_ui()->label->setText(QString("%1 m/m").arg(value));
+void MainWindow::read_speed() {
+    if (!process->waitForStarted()) {
+        std::cerr << "Failed to start process!" << std::endl;
+        return;
+    }
+    QByteArray output = process->readAllStandardOutput();
+    bool ok;
+    int speed = output.toInt(&ok);
+    if (ok) {
+        custom_dial->set_current(speed);
+        custom_dial->update();
+    } else {
+        std::cerr << "Error reading speed data\n";
+    }
 }
 
