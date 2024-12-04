@@ -14,6 +14,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
+# Define resource paths
+set(PROJECT_ROOT_PATH ${CMAKE_SOURCE_DIR})
 
 set(PROJECT_SOURCES
         main.cpp

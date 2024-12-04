@@ -29,8 +29,7 @@ public:
     void init();
 
 private:
-    //Ui::MainWindow *ui;
-    QProcess *process;
+    QProcess *process = nullptr;
     CustomDial *custom_dial;
 };
 #endif // MAINWINDOW_H

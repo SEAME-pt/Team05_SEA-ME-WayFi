@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-//#include "./ui_mainwindow.h"
 #include <QDir>
 #include <QVBoxLayout>
 #include <QCoreApplication>
@@ -10,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , custom_dial(new CustomDial(this))
 {
     setStyleSheet("background-color: rgb(4, 2, 54);");
-    custom_dial->setFixedSize(500, 500);
+    custom_dial->setFixedSize(600, 600);
     // Set up the layout
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(custom_dial, 0, Qt::AlignCenter);
@@ -21,13 +20,12 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);
     connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
 
-    QTimer::singleShot(0, this, &MainWindow::init);
+    //QTimer::singleShot(0, this, &MainWindow::init);
 }
 
 MainWindow::~MainWindow()
 {
-    //delete ui;
-    delete process;
+    //delete process;
     delete custom_dial;
 }
 
@@ -35,12 +33,15 @@ void MainWindow::init() {
     QString app = QCoreApplication::applicationDirPath();
     QString script = QDir(app).filePath("../get_speed.sh");
     script = QDir::cleanPath(script);
-
     if (!QFile::exists(script)) {
         std::cerr << "Script not found" << std::endl;
         return;
     }
     QStringList arguments;
+    if (!process) {
+        std::cerr << "Process is not initialized properly" << std::endl;
+        return;
+    }
     process->start(script, arguments);
 
     if (!process->waitForStarted()) {
