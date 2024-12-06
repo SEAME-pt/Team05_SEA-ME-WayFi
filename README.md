@@ -1,4 +1,4 @@
-## CAN Communication: Raspberry Pi (Python) and Arduino
+## CAN Communication: Raspberry Pi and Arduino
 This project demonstrates how to establish a **CAN (Controller Area Network)** communication between an **Arduino** and a **Raspberry Pi**. The Arduino reads speed data from a sensor, calculates the speed, and sends it to the Raspberry Pi over a CAN bus using an **MCP2515 CAN module**. The Raspberry Pi processes and displays the received data using Python.
 
 
