@@ -18,7 +18,10 @@ RUN apt-get update && \
     qt5-qmake \
     qtbase5-dev-tools \
     build-essential \
+    can-utils \
+    libsocketcan-dev \
     git && \
+    ip link set can0 up type can bitrate 500000 && \
     apt-get clean
 
 
@@ -28,15 +31,13 @@ RUN mkdir /app
 WORKDIR /app
 
 # Copy your Qt application and scripts
-COPY ./build/digital_cluster /app/digital_cluster
-COPY ./get_speed.sh /app/get_speed.sh
-COPY ./digital-7.ttf /app/digital-7.ttf
-COPY ./Calculator.ttf /app/Calculator.ttf
+COPY . /app/
 
-# Make your Qt executable and scripts executable
-RUN chmod +x /app/digital_cluster
-RUN chmod +x /app/get_speed.sh
+RUN mkdir -p build && \
+    cd build && \
+    cmake .. && \
+    make
 
 
 # Set the default command to run your application
-CMD ["./digital_cluster"]
+CMD ["./build/digital_cluster", "-lpcan"]

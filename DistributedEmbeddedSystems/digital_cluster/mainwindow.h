@@ -10,6 +10,7 @@
 #include "customdial.h"
 #include "driving.h"
 #include <QVBoxLayout>
+#include "canreader.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -26,14 +27,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void read_speed();
-    void init();
-
 private:
     CustomDial *custom_dial = nullptr;
     QThread *thread = nullptr;
     Driving *drive = nullptr;
     QVBoxLayout *layout = nullptr;
     QWidget *centralWidget = nullptr;
+    CanReader *can_read;
 };
 #endif // MAINWINDOW_H

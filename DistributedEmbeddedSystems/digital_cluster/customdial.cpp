@@ -12,9 +12,9 @@ CustomDial::CustomDial(QWidget *parent)
     : QWidget(parent), current(0), max(10)
 {
     QString path = QCoreApplication::applicationDirPath();
-    QString digital_path = QDir(path).filePath("../digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
+    QString digital_path = QDir(path).filePath("./digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
     digital_path = QDir::cleanPath(digital_path);
-    QString calculator_path = QDir(path).filePath("../Calculator.ttf");
+    QString calculator_path = QDir(path).filePath("./Calculator.ttf");
     calculator_path = QDir::cleanPath(calculator_path);
 
     font_id = font.addApplicationFont(digital_path);
@@ -57,6 +57,7 @@ void CustomDial::paintEvent(QPaintEvent *event) {
 
 void CustomDial::set_current(int n) {
     current = n;
+    update();
 }
 
 

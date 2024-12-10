@@ -9,7 +9,7 @@ class Driving : public QObject
 {
     Q_OBJECT
 public:
-    explicit Driving(QObject *parent = nullptr);
+    Driving(QObject *parent = nullptr);
     ~Driving();
 
 public slots:

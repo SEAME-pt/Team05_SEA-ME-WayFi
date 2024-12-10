@@ -23,13 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     thread = new QThread();
     drive->moveToThread(thread);
-
-    //connect(thread, &QThread::started, drive, &Driving::start_process);
-    //drive->start_process();
     thread->start();
     QMetaObject::invokeMethod(drive, "start_process", Qt::QueuedConnection);
-    // init();
-
+    can_read = new CanReader(this);
+    can_read->start_reading(custom_dial);
 }
 
 MainWindow::~MainWindow()
@@ -38,7 +35,6 @@ MainWindow::~MainWindow()
     delete custom_dial;
     delete centralWidget;
 
-    //disconnect(thread, &QThread::started, drive, &Driving::start_process);
     QMetaObject::invokeMethod(drive, "stop_process", Qt::QueuedConnection);
     if (thread->isRunning()) {
         thread->quit();
@@ -49,43 +45,3 @@ MainWindow::~MainWindow()
         delete drive;
     std::cout << "Removing mainwindow" << std::endl;
 }
-
-// void MainWindow::init() {
-    // while(1) {
-    //     std::cout << "Main thread\n";
-    //     usleep(1000);
-    //     break ;
-    // }
-//     if (!process) {
-//         std::cerr << "Process not initialized\n";
-//     }
-//     connect(process, &QProcess::readyReadStandardOutput, this, &MainWindow::read_speed);
-//     QString app = QCoreApplication::applicationDirPath();
-//     QString script = QDir(app).filePath("../get_speed.sh");
-//     script = QDir::cleanPath(script);
-//     if (!QFile::exists(script)) {
-//         std::cerr << "Script not found" << std::endl;
-//         return;
-//     }
-//     QStringList arguments;
-//     if (!process) {
-//         std::cerr << "Process is not initialized properly" << std::endl;
-//         return;
-//     }
-//     process->start(script, arguments);
-// }
-
-// void MainWindow::read_speed() {
-//     if (!process->waitForStarted()) {
-//         std::cerr << "Failed to start process!" << std::endl;
-//         return;
-//     }
-//     QByteArray output = process->readAllStandardOutput();
-//     bool ok;
-//     int speed = output.toInt(&ok);
-//     if (ok) {
-//         custom_dial->set_current(speed);
-//         custom_dial->update();
-//     }
-// }
-

@@ -15,7 +15,8 @@ Driving::~Driving() {
 
 void Driving::start_process() {
     QString app = QCoreApplication::applicationDirPath();
-    QString script = QDir(app).filePath("../get_speed.sh");
+    QString script = QDir(app).filePath("./motors/motors.py");
+    QString venv = QDir(app).filePath("./motors/myenv/bin/python");
     script = QDir::cleanPath(script);
     if (!QFile::exists(script)) {
         std::cerr << "Script not found" << std::endl;
@@ -23,21 +24,13 @@ void Driving::start_process() {
     }
     process = new QProcess();
     QStringList args;
-    process->start(script, args);
-    if (process && process->waitForStarted()) {
-        std::cout << "Process started" << std::endl;
-    }
-    if (process && process->state() != QProcess::NotRunning)
-        std::cout << "Process running"  << std::endl;
 
-    // QString venv = "../motors/myenv/bin/python";
-    // QString script = "../motors/motors.py";
-    // QStringList args;
-    // args << script;
-    // process2->moveToThread(thread);
-    // connect(thread, &QThread::started, [=]() {
-    //     process2->start(venv, args);  // Start the process in the worker thread
-    // });
+    args << script;
+    process->start(venv, args);  // Start the process in the worker thread
+    if (process && process->waitForStarted())
+        std::cout << "Process started" << std::endl;
+    if (process && process->state() != QProcess::NotRunning)
+        std::cout << "Process running" << std::endl;
 }
 
 void Driving::stop_process() {

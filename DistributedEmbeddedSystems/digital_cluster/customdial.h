@@ -12,7 +12,7 @@ class CustomDial : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CustomDial(QWidget *parent = nullptr);
+    CustomDial(QWidget *parent = nullptr);
     ~CustomDial();
     void set_current(int n);
 protected:
