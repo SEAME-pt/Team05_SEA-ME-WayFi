@@ -52,6 +52,7 @@ else()
             ${PROJECT_SOURCES}
             customdial.h customdial.cpp
             driving.h driving.cpp
+            canreader.h canreader.cpp
         )
     endif()
 
