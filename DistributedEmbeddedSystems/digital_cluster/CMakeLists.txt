@@ -24,6 +24,8 @@ set(PROJECT_SOURCES
         mainwindow.h
         customdial.h
         mainwindow.ui
+        driving.h
+        driving.cpp
         ${TS_FILES}
 )
 
@@ -49,6 +51,7 @@ else()
         add_executable(digital_cluster
             ${PROJECT_SOURCES}
             customdial.h customdial.cpp
+            driving.h driving.cpp
         )
     endif()
 

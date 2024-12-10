@@ -3,14 +3,29 @@
 #include <QStyleOptionSlider>
 #include <QStylePainter>
 #include <QTimer>
-#include <QFontDatabase>
 #include <QCoreApplication>
 #include <QDir>
+#include <QSettings>
 #include <iostream>
 
 CustomDial::CustomDial(QWidget *parent)
     : QWidget(parent), current(0), max(10)
-{}
+{
+    QString path = QCoreApplication::applicationDirPath();
+    QString digital_path = QDir(path).filePath("../digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
+    digital_path = QDir::cleanPath(digital_path);
+    QString calculator_path = QDir(path).filePath("../Calculator.ttf");
+    calculator_path = QDir::cleanPath(calculator_path);
+
+    font_id = font.addApplicationFont(digital_path);
+    font_id2 = font2.addApplicationFont(calculator_path);
+}
+
+CustomDial::~CustomDial() {
+    QFontDatabase::removeApplicationFont(font_id);
+    QFontDatabase::removeApplicationFont(font_id2);
+    std::cout << "Remove custom dial" << std::endl;
+}
 
 void CustomDial::paintEvent(QPaintEvent *event) {
     QPainter painter(this); // create qpainter object
@@ -30,24 +45,13 @@ void CustomDial::paintEvent(QPaintEvent *event) {
 
     painter.setPen(QPen(Qt::cyan));
 
-    QFontDatabase font;
-    QFontDatabase font2;
-    QString path = QCoreApplication::applicationDirPath();
-    QString digital_path = QDir(path).filePath("../digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
-    digital_path = QDir::cleanPath(digital_path);
-    QString calculator_path = QDir(path).filePath("../Calculator.ttf");
-    calculator_path = QDir::cleanPath(calculator_path);
-
-    font.addApplicationFont(digital_path);
-    font2.addApplicationFont(calculator_path);
-
     painter.setFont(QFont("Digital-7", 150, QFont::Bold));
     painter.drawText(rect(), Qt::AlignCenter, QString::number(current));
 
     painter.setPen(QPen(Qt::darkCyan));
     painter.setFont(QFont("Calculator", 35));
     QRect rect1 = rect();
-    rect1.setTop(rect1.top() + 270);
+    rect1.setTop(rect1.top() + 300);
     painter.drawText(rect1, Qt::AlignCenter, "km/h");
 }
 

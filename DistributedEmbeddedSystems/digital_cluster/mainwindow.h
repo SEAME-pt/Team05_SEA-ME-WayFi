@@ -5,10 +5,11 @@
 #include <cstdio>
 #include <QTimer>
 #include <QProcess>
-#include <iostream>
 #include <cstdlib>
 #include <QThread>
 #include "customdial.h"
+#include "driving.h"
+#include <QVBoxLayout>
 
 
 QT_BEGIN_NAMESPACE
@@ -29,7 +30,10 @@ public:
     void init();
 
 private:
-    QProcess *process = nullptr;
-    CustomDial *custom_dial;
+    CustomDial *custom_dial = nullptr;
+    QThread *thread = nullptr;
+    Driving *drive = nullptr;
+    QVBoxLayout *layout = nullptr;
+    QWidget *centralWidget = nullptr;
 };
 #endif // MAINWINDOW_H

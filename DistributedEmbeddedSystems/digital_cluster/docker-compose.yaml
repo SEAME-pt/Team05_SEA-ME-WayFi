@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  qt-app:
+    image: qt-app
+    build:
+      context: .
+    environment:
+      - DISPLAY=${DISPLAY}  # Pass the host's DISPLAY environment variable
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix  # Mount X11 socket for GUI access
+    network_mode: host
