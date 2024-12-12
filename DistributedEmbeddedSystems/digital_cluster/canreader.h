@@ -11,7 +11,7 @@
 #include <net/if.h>
 #include <linux/can.h>
 #include <linux/can/raw.h>
-#include <customdial.h>>
+#include "customdial.h"
 
 class CanReader : public QObject
 {

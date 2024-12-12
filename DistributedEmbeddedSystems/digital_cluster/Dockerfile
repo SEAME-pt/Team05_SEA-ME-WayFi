@@ -20,10 +20,24 @@ RUN apt-get update && \
     build-essential \
     can-utils \
     libsocketcan-dev \
-    git && \
-    ip link set can0 up type can bitrate 500000 && \
+    git \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcb-util1 \
+    libxcb-render0 \
+    libxcb-shape0 \
+    libxcb-xfixes0 \
+    libxcb-sync1 \
+    libxcb-icccm4 \
+    libxcb-image0 \
+    libxcb-keysyms1 \
+    libxcb-randr0 \
+    libxcb-xinerama0 \
+    libxcb-xkb1 \
+    libxkbcommon-x11-0 && \
     apt-get clean
 
+#sudo ip link set can0 up type can bitrate 500000
 
 RUN mkdir /app
 
@@ -31,13 +45,17 @@ RUN mkdir /app
 WORKDIR /app
 
 # Copy your Qt application and scripts
-COPY . /app/
+COPY ./build/digital_cluster /app/
+RUN chmod +x /app/digital_cluster
 
-RUN mkdir -p build && \
-    cd build && \
-    cmake .. && \
-    make
+# RUN mkdir -p build && \
+#     cd build && \
+#     cmake .. && \
+#     make
 
+# ENV QT_X11_NO_MITSHM=1
+# ENV DISPLAY=:0  
+#Use host display (to be overridden by the user at runtime)
 
 # Set the default command to run your application
-CMD ["./build/digital_cluster", "-lpcan"]
+CMD ["./digital_cluster", "-lpcan"]
