@@ -1,9 +1,7 @@
 # Compilation
-To compile the program run the following commands on the terminal:
+To run this program run:
 ```bash
-mkdir build
-cd build
-cmake ..
-make
-./executable
+./automate.sh
 ```
+This will compile and send the program to the jetracer.
+Then in the jetracer you have to run it again with docker-compose
