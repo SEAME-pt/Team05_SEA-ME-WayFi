@@ -1,61 +1,50 @@
-# Use a base image with Qt pre-installed
-FROM ubuntu:latest
+FROM arm64v8/ubuntu:22.04
 
-# Set non-interactive mode for package installation
 ENV DEBIAN_FRONTEND=noninteractive
+ENV CROSS_COMPILE=aarch64-linux-gnu-
+ENV CC=${CROSS_COMPILE}gcc
+ENV CXX=${CROSS_COMPILE}g++
 
-# Update and install dependencies
-RUN apt-get update && \
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://ports.ubuntu.com/ubuntu-ports|' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com/ubuntu|http://ports.ubuntu.com/ubuntu-ports|' /etc/apt/sources.list && \
+    apt-get update --fix-missing
+
+# Add ARM64 architecture and install dependencies
+RUN dpkg --add-architecture arm64 && apt-get update && \
     apt-get install -y \
-    gcc-13 g++-13 \
-    libc6 \
-    libstdc++6 \
-    libqt5core5a \
-    libqt5gui5 \
-    libqt5widgets5 \
-    qtbase5-dev \
-    qtchooser \
-    qt5-qmake \
-    qtbase5-dev-tools \
     build-essential \
-    can-utils \
-    libsocketcan-dev \
+    cmake \
     git \
-    libx11-xcb1 \
-    libxcb1 \
-    libxcb-util1 \
-    libxcb-render0 \
-    libxcb-shape0 \
-    libxcb-xfixes0 \
-    libxcb-sync1 \
-    libxcb-icccm4 \
-    libxcb-image0 \
-    libxcb-keysyms1 \
-    libxcb-randr0 \
-    libxcb-xinerama0 \
-    libxcb-xkb1 \
-    libxkbcommon-x11-0 && \
-    apt-get clean
+    python3 \
+    python3-pip \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
+    libopencv-dev \
+    curl \
+    qtbase5-dev \
+    qt5-qmake \
+    qtbase5-dev:arm64 \
+    qt5-qmake:arm64 \
+    libqt5widgets5:arm64 && \
+    rm -rf /var/lib/apt/lists/*
 
-#sudo ip link set can0 up type can bitrate 500000
+# Set the working directory to /workspace
+WORKDIR /workspace
 
-RUN mkdir /app
+# Copy the local project files into the container
+COPY . /workspace
+COPY ./motors /workspace/motors
 
-# Set the working directory in the container
-WORKDIR /app
+# Build the project
+RUN chmod +x ./motors/motors.py && \
+    chmod 755 ./motors && \
+    chmod +x ./motors/venv/bin/python && \ 
+    cd build && \
+    rm -rf CMakeCache.txt CMakeFiles/ && \
+    cmake .. && \
+    make clean && \
+    make && \
+    chmod +x ./digital_cluster
 
-# Copy your Qt application and scripts
-COPY ./build/digital_cluster /app/
-RUN chmod +x /app/digital_cluster
-
-# RUN mkdir -p build && \
-#     cd build && \
-#     cmake .. && \
-#     make
-
-# ENV QT_X11_NO_MITSHM=1
-# ENV DISPLAY=:0  
-#Use host display (to be overridden by the user at runtime)
-
-# Set the default command to run your application
-CMD ["./digital_cluster", "-lpcan"]
+# Set entrypoint to run the application
+ENTRYPOINT ["./build/digital_cluster"]

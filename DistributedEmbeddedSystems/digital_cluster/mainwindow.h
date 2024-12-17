@@ -30,6 +30,7 @@ public:
 private:
     CustomDial *custom_dial = nullptr;
     QThread *thread = nullptr;
+    QThread *thread_can = nullptr;
     Driving *drive = nullptr;
     QVBoxLayout *layout = nullptr;
     QWidget *centralWidget = nullptr;

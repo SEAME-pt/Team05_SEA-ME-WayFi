@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
         mainwindow.ui
         driving.h
         driving.cpp
+        canreader.h
+        canreader.cpp
         ${TS_FILES}
 )
 

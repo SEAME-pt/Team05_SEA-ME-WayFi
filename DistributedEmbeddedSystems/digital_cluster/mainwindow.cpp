@@ -12,12 +12,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setStyleSheet("background-color: rgb(4, 2, 54);");
     custom_dial->setFixedSize(600, 600);
-    // Set up the layout
-    layout = new QVBoxLayout();
+    
+    layout = new QVBoxLayout(); // Set up the layout
     layout->addWidget(custom_dial, 0, Qt::AlignCenter);
 
-    // Create a central widget and set it
-    centralWidget = new QWidget();
+    centralWidget = new QWidget(); // Create a central widget and set it
     centralWidget->setLayout(layout);
     setCentralWidget(centralWidget);
 
@@ -25,8 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
     drive->moveToThread(thread);
     thread->start();
     QMetaObject::invokeMethod(drive, "start_process", Qt::QueuedConnection);
-    can_read = new CanReader(this);
-    can_read->start_reading(custom_dial);
+    
+    can_read = new CanReader();
+    thread_can = new QThread();
+    can_read->moveToThread(thread_can);
+    thread_can->start();
+    QMetaObject::invokeMethod(can_read, "start_reading", Qt::QueuedConnection,  Q_ARG(CustomDial*, custom_dial));
 }
 
 MainWindow::~MainWindow()
@@ -34,14 +37,17 @@ MainWindow::~MainWindow()
     delete layout;
     delete custom_dial;
     delete centralWidget;
-
     QMetaObject::invokeMethod(drive, "stop_process", Qt::QueuedConnection);
-    if (thread->isRunning()) {
-        thread->quit();
-        thread->wait();  // Ensure the thread finishes properly
-        delete thread;
-    }
-    if (drive)
-        delete drive;
+    QMetaObject::invokeMethod(can_read, "stop_reading", Qt::QueuedConnection);
+
+    thread->quit();
+    thread->wait();  // Ensure the thread finishes properly
+    delete thread;
+
+    thread_can->quit();
+    thread_can->wait();  // Ensure the thread finishes properly
+    delete thread_can;
+    delete drive;
+    delete can_read;
     std::cout << "Removing mainwindow" << std::endl;
 }

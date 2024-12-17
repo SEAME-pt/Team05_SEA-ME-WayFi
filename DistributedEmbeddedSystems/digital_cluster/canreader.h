@@ -18,12 +18,13 @@ class CanReader : public QObject
     Q_OBJECT
 public:
     CanReader(QObject *parent = nullptr);
-    void start_reading(CustomDial *dial);
     ~CanReader();
+    void start_reading(CustomDial *dial);
+    void stop_reading();
 
 private :
     int can_fd = -1;
-signals:
+    bool running;
 };
 
 #endif // CANREADER_H
