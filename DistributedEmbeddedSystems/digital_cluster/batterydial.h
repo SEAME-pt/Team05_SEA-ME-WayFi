@@ -1,5 +1,5 @@
-#ifndef CUSTOMDIAL_H
-#define CUSTOMDIAL_H
+#ifndef BATTERYDIAL_H
+#define BATTERYDIAL_H
 
 #include <QWidget>
 #include <QPainter>
@@ -8,14 +8,13 @@
 #include <QTimer>
 #include <QFontDatabase>
 
-class CustomDial : public QWidget
+class BatteryDial : public QWidget
 {
     Q_OBJECT
 public:
-    CustomDial(QWidget *parent = nullptr);
-    ~CustomDial();
+    BatteryDial(QWidget *parent = nullptr);
+    ~BatteryDial();
     void set_current(int n);
-    int get_current();
 protected:
     void paintEvent(QPaintEvent *event) override;
 
@@ -29,4 +28,4 @@ private:
 signals:
 };
 
-#endif // CUSTOMDIAL_H
+#endif // BATTERYDIAL_H

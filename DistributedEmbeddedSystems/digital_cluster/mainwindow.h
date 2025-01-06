@@ -8,10 +8,13 @@
 #include <cstdlib>
 #include <QThread>
 #include "customdial.h"
-#include "driving.h"
+#include "batterydial.h"
 #include <QVBoxLayout>
-#include "canreader.h"
-
+#include <QtMqtt/QtMqtt>
+#include <QtMqtt/QMqttClient>
+#include <QtMqtt/QMqttTopicFilter>
+#include <QtMqtt/QMqttMessage>
+// #include <QtMqtt>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,14 +29,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    private slots:
+    void publishMessage();  
+    void onMqttConnected();
+    void onMessageReceived(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
+    void onMqttStateChanged(QMqttClient::ClientState state);
+    void init_mqtt();
 
 private:
-    CustomDial *custom_dial = nullptr;
-    QThread *thread = nullptr;
-    QThread *thread_can = nullptr;
-    Driving *drive = nullptr;
+    CustomDial *left_dial = nullptr;
+    BatteryDial *right_dial = nullptr;
     QVBoxLayout *layout = nullptr;
     QWidget *centralWidget = nullptr;
-    CanReader *can_read;
+    QMqttClient *mqttClient;
 };
 #endif // MAINWINDOW_H

@@ -9,14 +9,16 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# Set the Qt prefix path if necessary
+set(CMAKE_PREFIX_PATH "/opt/qt515")
+
+# Find the required Qt modules (Widgets, Mqtt)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Mqtt)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Mqtt)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-# Define resource paths
-set(PROJECT_ROOT_PATH ${CMAKE_SOURCE_DIR})
-
+# Define source files
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -24,10 +26,8 @@ set(PROJECT_SOURCES
         mainwindow.h
         customdial.h
         mainwindow.ui
-        driving.h
-        driving.cpp
-        canreader.h
-        canreader.cpp
+        batterydial.h
+        batterydial.cpp
         ${TS_FILES}
 )
 
@@ -36,46 +36,35 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET digital_cluster APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 else()
     if(ANDROID)
         add_library(digital_cluster SHARED
             ${PROJECT_SOURCES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(digital_cluster
             ${PROJECT_SOURCES}
-            customdial.h customdial.cpp
-            driving.h driving.cpp
-            canreader.h canreader.cpp
         )
     endif()
-
 endif()
 
-target_link_libraries(digital_cluster PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.digital_cluster)
+# Link to the appropriate Qt libraries based on version
+if(${QT_VERSION_MAJOR} EQUAL 6)
+    target_link_libraries(digital_cluster PRIVATE Qt6::Widgets Qt6::Mqtt)
+else()
+    target_link_libraries(digital_cluster PRIVATE Qt5::Widgets Qt5::Mqtt)
 endif()
+
+# Set properties for macOS/iOS packaging
 set_target_properties(digital_cluster PROPERTIES
-    ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
 
+# Install the application
 include(GNUInstallDirs)
 install(TARGETS digital_cluster
     BUNDLE DESTINATION .
@@ -86,3 +75,4 @@ install(TARGETS digital_cluster
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(digital_cluster)
 endif()
+

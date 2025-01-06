@@ -15,8 +15,6 @@ RUN dpkg --add-architecture arm64 && apt-get update && \
     build-essential \
     cmake \
     git \
-    python3 \
-    python3-pip \
     gcc-aarch64-linux-gnu \
     g++-aarch64-linux-gnu \
     libopencv-dev \
@@ -28,18 +26,29 @@ RUN dpkg --add-architecture arm64 && apt-get update && \
     libqt5widgets5:arm64 && \
     rm -rf /var/lib/apt/lists/*
 
+#  RUN apt-get update && apt-get install -y \
+#     qtchooser \
+#     qtbase5-dev-tools \
+#     libqt5mqtt5-dev \
+#     && rm -rf /var/lib/apt/lists/*
+
+# RUN apt-get update && apt-get install -y binfmt-support qemu && update-binfmts --enable qemu-x86_64
+
+RUN curl -SL https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz -o qt-everywhere-src.tar.xz && \
+    tar -xf qt-everywhere-src.tar.xz && \
+    cd qt-everywhere-src-5.15.2 && \
+    ./configure -opensource -confirm-license -release -nomake examples -nomake tests && \
+    make && \
+    make install
+
 # Set the working directory to /workspace
 WORKDIR /workspace
 
 # Copy the local project files into the container
 COPY . /workspace
-COPY ./motors /workspace/motors
 
 # Build the project
-RUN chmod +x ./motors/motors.py && \
-    chmod 755 ./motors && \
-    chmod +x ./motors/venv/bin/python && \ 
-    cd build && \
+RUN cd build && \
     rm -rf CMakeCache.txt CMakeFiles/ && \
     cmake .. && \
     make clean && \
