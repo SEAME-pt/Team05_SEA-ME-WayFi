@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "iostream": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/home/matilde/Team05_SEA-ME_DES/DistributedEmbeddedSystems/digital_cluster"
 }

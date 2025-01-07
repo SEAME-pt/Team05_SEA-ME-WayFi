@@ -14,7 +14,9 @@
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttMessage>
-// #include <QtMqtt>
+#include <QtMqtt>
+#include <QApplication>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -30,7 +32,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     private slots:
-    void publishMessage();  
+    //void publishMessage();  
     void onMqttConnected();
     void onMessageReceived(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
     void onMqttStateChanged(QMqttClient::ClientState state);

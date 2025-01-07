@@ -1,17 +1,12 @@
 FROM arm64v8/ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CROSS_COMPILE=aarch64-linux-gnu-
-ENV CC=${CROSS_COMPILE}gcc
-ENV CXX=${CROSS_COMPILE}g++
 
 RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://ports.ubuntu.com/ubuntu-ports|' /etc/apt/sources.list && \
     sed -i 's|http://security.ubuntu.com/ubuntu|http://ports.ubuntu.com/ubuntu-ports|' /etc/apt/sources.list && \
     apt-get update --fix-missing
 
-# Add ARM64 architecture and install dependencies
-RUN dpkg --add-architecture arm64 && apt-get update && \
-    apt-get install -y \
+RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
@@ -23,31 +18,68 @@ RUN dpkg --add-architecture arm64 && apt-get update && \
     qt5-qmake \
     qtbase5-dev:arm64 \
     qt5-qmake:arm64 \
-    libqt5widgets5:arm64 && \
-    rm -rf /var/lib/apt/lists/*
+    libqt5widgets5:arm64
 
-#  RUN apt-get update && apt-get install -y \
-#     qtchooser \
-#     qtbase5-dev-tools \
+RUN apt-get install -y \
+    qtchooser \
+    qtbase5-dev-tools 
 #     libqt5mqtt5-dev \
-#     && rm -rf /var/lib/apt/lists/*
 
-# RUN apt-get update && apt-get install -y binfmt-support qemu && update-binfmts --enable qemu-x86_64
+# RUN wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key && \
+#     apt-key add mosquitto-repo.gpg.key && \
+#     cd /etc/apt/sources.list.d/ && \
+#     wget http://repo.mosquitto.org/debian/mosquitto-jammy.list && \
+#     apt-get update && apt-get install mosquitto mosquitto-clients
 
-RUN curl -SL https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz -o qt-everywhere-src.tar.xz && \
-    tar -xf qt-everywhere-src.tar.xz && \
-    cd qt-everywhere-src-5.15.2 && \
-    ./configure -opensource -confirm-license -release -nomake examples -nomake tests && \
+# RUN apt-get install -y wget && wget -qO - http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key | tee /etc/apt/trusted.gpg.d/mosquitto.asc && \
+#     echo "deb http://repo.mosquitto.org/debian buster main" | tee /etc/apt/sources.list.d/mosquitto.list && \
+#     apt-get update && \
+#     apt-get install -y mosquitto mosquitto-clients && \
+#     apt-get clean
+
+# RUN apt-get update && apt-get install -y qemu binfmt-support qemu-user-static \
+#     update-binfmts --enable qemu-aarch64 
+
+# RUN apt-get install -y libqt5mqtt5-dev:arm64
+
+# RUN apt-get update && apt-get install -y \
+#     qemu \
+#     binfmt-support \
+#     qemu-user-static
+
+# RUN update-binfmts --enable qemu-aarch64
+RUN git clone https://code.qt.io/qt/qtmqtt.git /qtmqtt && \
+    cd /qtmqtt && \
+    git checkout 5.15 && \
+    qmake "CONFIG+=qt5" && \ 
     make && \
     make install
 
-# Set the working directory to /workspace
+# RUN rm -rf qt-everywhere-src-5.15.2 && \
+#     curl -SL https://download.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz \
+#     -o qt-everywhere-src.tar.xz && \
+#     tar -xf qt-everywhere-src.tar.xz && \
+#     cd qt-everywhere-src-5.15.2 && \
+#     ./configure -opensource -confirm-license -release -nomake \
+#     examples -nomake tests -qt-mqtt -skip qt3d -skip qtwebengine \
+#     -platform linux-g++ -c++std c++17 \
+#     -I/usr/aarch64-linux-gnu/include/c++/10 \
+#     -I/usr/aarch64-linux-gnu/include/ && \
+#     make -j1 && \
+#     make install && \
+#     cd .. && rm -rf qt-everywhere-src*
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# RUN echo "QT_SELECT=5" >> /etc/environment
+
+#Set working directory to /workspace
 WORKDIR /workspace
 
-# Copy the local project files into the container
+#Copy local project files into the container
 COPY . /workspace
 
-# Build the project
+#Build project
 RUN cd build && \
     rm -rf CMakeCache.txt CMakeFiles/ && \
     cmake .. && \
@@ -55,5 +87,4 @@ RUN cd build && \
     make && \
     chmod +x ./digital_cluster
 
-# Set entrypoint to run the application
 ENTRYPOINT ["./build/digital_cluster"]

@@ -55,7 +55,6 @@ MainWindow::~MainWindow()
     delete left_dial;
     delete right_dial;
     delete centralWidget;
-
     std::cout << "Removing mainwindow" << std::endl;
 }
 
@@ -70,14 +69,14 @@ void MainWindow::onMqttConnected() {
     }
 }
 
-void MainWindow::publishMessage()
-{
-    double speed = left_dial->get_current();
-    QMqttTopicName topic("jetracer/speed");
-    QByteArray message = QByteArray::number(speed);
-    mqttClient->publish(topic, message); // Use QByteArray para a mensagem
-    left_dial->set_current(speed);
-}
+// void MainWindow::publishMessage()
+// {
+//     double speed = left_dial->get_current();
+//     QMqttTopicName topic("jetracer/speed");
+//     QByteArray message = QByteArray::number(speed);
+//     mqttClient->publish(topic, message); // Use QByteArray para a mensagem
+//     left_dial->set_current(speed);
+// }
 
 void MainWindow::onMessageReceived(const QByteArray &message, const QMqttTopicName &topic)
 {
