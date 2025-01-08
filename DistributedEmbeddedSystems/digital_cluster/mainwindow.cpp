@@ -8,29 +8,22 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , mqttClient(new QMqttClient(this))
+     , mqttClient(new QMqttClient(this))
 {
     setStyleSheet("background-color: rgb(4, 2, 54);");
     left_dial = new CustomDial();
     left_dial->setStyleSheet("background-color: rgb(4, 2, 54);");
     left_dial->setFixedSize(400, 400);
-
     right_dial = new BatteryDial();
     right_dial->setStyleSheet("background-color: rgb(4, 2, 54);");
     right_dial->setFixedSize(400, 400);
-
     QHBoxLayout* layout = new QHBoxLayout(); //horizontal layout
     layout->addWidget(left_dial, 0, Qt::AlignCenter);
     layout->addWidget(right_dial, 0, Qt::AlignCenter);
-
     QWidget* centralWidget = new QWidget(); // Create a central widget and set it
     centralWidget->setLayout(layout);
     setCentralWidget(centralWidget);
-
     init_mqtt();
-    // QTimer *timer = new QTimer(this);
-    // connect(timer, &QTimer::timeout, this, &MainWindow::publishMessage);
-    // timer->start(1000); // Publish every 1000 milliseconds (1 second)
 }
 
 void MainWindow::init_mqtt() {
@@ -45,7 +38,6 @@ void MainWindow::init_mqtt() {
     connect(mqttClient, &QMqttClient::errorChanged, this, [](QMqttClient::ClientError error) {
     qDebug() << "MQTT Client error:" << error;
     });
-
     mqttClient->connectToHostEncrypted();
 }
 
@@ -69,15 +61,6 @@ void MainWindow::onMqttConnected() {
     }
 }
 
-// void MainWindow::publishMessage()
-// {
-//     double speed = left_dial->get_current();
-//     QMqttTopicName topic("jetracer/speed");
-//     QByteArray message = QByteArray::number(speed);
-//     mqttClient->publish(topic, message); // Use QByteArray para a mensagem
-//     left_dial->set_current(speed);
-// }
-
 void MainWindow::onMessageReceived(const QByteArray &message, const QMqttTopicName &topic)
 {
     qDebug() << "Message received on topic" << topic.name() << ":" << message;
@@ -93,7 +76,6 @@ void MainWindow::onMessageReceived(const QByteArray &message, const QMqttTopicNa
         qDebug() << "Invalid speed data received!";
     }
 }
-
 
 void MainWindow::onMqttStateChanged(QMqttClient::ClientState state)
 {

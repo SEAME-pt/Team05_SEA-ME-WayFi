@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set the Qt prefix path if necessary
-set(CMAKE_PREFIX_PATH "/snap/qt515-core20/43/opt/qt515")
+# set(CMAKE_PREFIX_PATH "/opt/qt515")
 
 # Find the required Qt modules (Widgets, Mqtt)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Mqtt)

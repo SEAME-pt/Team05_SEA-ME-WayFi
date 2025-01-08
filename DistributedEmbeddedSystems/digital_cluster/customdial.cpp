@@ -34,17 +34,33 @@ void CustomDial::paintEvent(QPaintEvent *event) {
     int radius = qMin(width(), height()) / 2 - 10;  // Ensure it fits inside the widget
 
     // Draw background circle
-    painter.setPen(QPen(Qt::darkCyan, 20));
+    painter.setPen(QPen(QColor(0, 120, 120, 98), 20));
     painter.setBrush(Qt::NoBrush);
     painter.drawArc(10, 10, radius * 2, radius * 2, 225 * 16, -270 * 16);
 
     //draw progression
     int angle_progress = (current * 270) / max;
-    painter.setPen(QPen(Qt::cyan, 20));
-    painter.drawArc(10, 10, radius * 2, radius * 2, 225 * 16, -angle_progress * 16);
+    // painter.setPen(QPen(Qt::cyan, 20));
+    QColor startColor(0, 80, 100);  // Deep cyan base color
+    QColor endColor(0, 255, 255);  
 
+    int segmentCount = 60; // Number of segments for smooth transition
+    int segmentAngle = angle_progress / segmentCount;
+    for (int i = 0; i < segmentCount; ++i) {
+        float t = static_cast<float>(i) / segmentCount; // Transition factor (0 to 1)
+        // Smooth transition from startColor to endColor
+        QColor color = QColor::fromRgbF(
+            (1 - t) * startColor.redF() + t * endColor.redF(),   // Red
+            (1 - t) * startColor.greenF() + t * endColor.greenF(), // Green
+            (1 - t) * startColor.blueF() + t * endColor.blueF()  // Blue
+        );
+        QPen pen(color, 20);
+        painter.setPen(pen);
+        painter.drawArc(10, 10, radius * 2, radius * 2, (225 - i * segmentAngle) * 16, -segmentAngle * 16);
+    }
+
+    //painter.drawArc(10, 10, radius * 2, radius * 2, 225 * 16, -angle_progress * 16);
     painter.setPen(QPen(Qt::cyan));
-
     painter.setFont(QFont("Digital-7", 100, QFont::Bold));
     painter.drawText(rect(), Qt::AlignCenter, QString::number(current));
 

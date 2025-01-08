@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Step 1: Build Docker image for ARM platform
-docker buildx build --platform linux/arm64 --load -t cross-env .
+docker buildx build --platform linux/arm64 --progress=plain --load -t  cross-env .
 
 # Step 2: Remove the old executable from the local system (if it exists)
 if [ -f "./digital_cluster" ]; then
