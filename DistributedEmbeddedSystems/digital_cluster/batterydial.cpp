@@ -10,8 +10,10 @@
 #include <iostream>
 
 BatteryDial::BatteryDial(QWidget *parent)
-    : QWidget(parent), current(30), max(100)
+    : QWidget(parent), current(1), max(100)
 {
+    setStyleSheet("background-color: rgb(2, 1, 30);");
+    setFixedSize(400, 400);
     QString path = QCoreApplication::applicationDirPath();
     QString digital_path = QDir(path).filePath("../digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
     digital_path = QDir::cleanPath(digital_path);
@@ -29,36 +31,33 @@ BatteryDial::~BatteryDial() {
 }
 
 void BatteryDial::paintEvent(QPaintEvent *event) {
-    QPainter painter(this);  // create qpainter object
+    QPainter painter(this);  //create qpainter object
     painter.setRenderHint(QPainter::Antialiasing, true);
-    int radius = qMin(width(), height()) / 2 - 10;  // Ensure it fits inside the widget
+    int radius = qMin(width(), height()) / 2 - 10;  
 
-    painter.setPen(QPen(QColor(0, 230, 140, 60), 20)); // Draw background circle
+    painter.setPen(QPen(QColor(0, 230, 140, 60), 20)); //background circle
     painter.setBrush(Qt::NoBrush);
     painter.drawArc(10, 10, radius * 2, radius * 2, 225 * 16, -270 * 16);
 
-    int angle_progress = (current * 270) / max;
-    int segmentCount = 50; // Number of segments for smooth transition
-    int segmentAngle = angle_progress / segmentCount;
-    QColor startColor(0, 65, 74);  // Base color
-    QColor endColor(0, 255, 186);  // Brighter green for 100% battery
-    // Adjust color based on the battery level
+    float angle_progress = (static_cast<float>(current) * 270.0f) / max;
+    int segments = 50; //nb of segments for smooth transition
+    float segment_angle = angle_progress / segments;
+    QColor start_color(0, 65, 74); 
+    QColor end_color(0, 255, 186);
     if (current < 50) {
-        // Darker green for lower battery levels (below or at 50)
-        startColor = QColor(0, 65, 74);  // Darker base color
-        endColor = QColor(0, 228, 220, 255);   // Darker bright green at max
+        start_color = QColor(0, 65, 74); 
+        end_color = QColor(0, 228, 220, 255); 
     }
-    for (int i = 0; i < segmentCount; ++i) {
-        float t = static_cast<float>(i) / segmentCount; // Transition factor (0 to 1)
-        // Smooth transition from startColor to endColor
+    for (int i = 0; i < segments; ++i) {
+        float t = static_cast<float>(i) / segments; //factor (0 to 1)
         QColor color = QColor::fromRgbF(
-            (1 - t) * startColor.redF() + t * endColor.redF(),   // Red
-            (1 - t) * startColor.greenF() + t * endColor.greenF(), // Green
-            (1 - t) * startColor.blueF() + t * endColor.blueF()  // Blue
+            (1 - t) * start_color.redF() + t * end_color.redF(),  
+            (1 - t) * start_color.greenF() + t * end_color.greenF(), 
+            (1 - t) * start_color.blueF() + t * end_color.blueF()  
         );
         QPen pen(color, 20);
         painter.setPen(pen);
-        painter.drawArc(10, 10, radius * 2, radius * 2, (225 - i * segmentAngle) * 16, -segmentAngle * 16);
+        painter.drawArc(10, 10, radius * 2, radius * 2, (225 - i * segment_angle) * 16, -segment_angle * 16);
     }
     painter.setPen(QPen(QColor(0, 250, 195)));
     painter.setFont(QFont("Digital-7", 100, QFont::Bold));

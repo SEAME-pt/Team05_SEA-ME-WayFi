@@ -9,9 +9,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set the Qt prefix path if necessary
-# set(CMAKE_PREFIX_PATH "/opt/qt515")
-
 # Find the required Qt modules (Widgets, Mqtt)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Mqtt)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Mqtt)
@@ -28,6 +25,10 @@ set(PROJECT_SOURCES
         mainwindow.ui
         batterydial.h
         batterydial.cpp
+        tempbar.h
+        tempbar.cpp
+        autonomybar.h
+        autonomybar.cpp
         ${TS_FILES}
 )
 
@@ -45,6 +46,7 @@ else()
     else()
         add_executable(digital_cluster
             ${PROJECT_SOURCES}
+
         )
     endif()
 endif()
