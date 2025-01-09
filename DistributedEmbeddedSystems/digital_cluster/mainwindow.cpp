@@ -13,24 +13,29 @@ MainWindow::MainWindow(QWidget *parent)
     left_dial = new CustomDial(this);
     right_dial = new BatteryDial(this);
     QHBoxLayout* layout = new QHBoxLayout(); //horizontal layout
-    layout->addWidget(left_dial, 0, Qt::AlignCenter);
-    layout->addWidget(right_dial, 0, Qt::AlignCenter);
+    layout->addWidget(left_dial, 1, Qt::AlignCenter);
+    layout->addWidget(right_dial, 1, Qt::AlignCenter);
     QVBoxLayout* mainlayout = new QVBoxLayout();
-    mainlayout->addLayout(layout, 4);  // Add the dials layout first
+    mainlayout->addLayout(layout, 4);
+
     temp = new TempBar(this);
     autonomy = new AutonomyBar(this);
     QHBoxLayout* layoutbar = new QHBoxLayout();
-    layoutbar->setSpacing(1);
-    //layoutbar->setContentsMargins(0, 0, 0, 0); 
-    layoutbar->addWidget(temp, 1, Qt::AlignCenter);
-    layoutbar->addWidget(autonomy, 1, Qt::AlignCenter);
-    // layoutbar->setSpacing(1);
+    layoutbar->setSpacing(100);
+    layoutbar->addWidget(temp, 1, Qt::AlignRight);
+    layoutbar->addWidget(autonomy, 1, Qt::AlignLeft);
+    //layoutbar->setContentsMargins(0, 10, 0, 0);
     mainlayout->addLayout(layoutbar, 1);
-    QWidget* centralWidget = new QWidget(this); // Create a central widget and set it
+    QWidget* centralWidget = new QWidget(this);
     centralWidget->setLayout(mainlayout);
     setCentralWidget(centralWidget);
 
     init_mqtt();
+}
+
+MainWindow::~MainWindow()
+{
+    std::cout << "Removing mainwindow" << std::endl;
 }
 
 void MainWindow::init_mqtt() {
@@ -45,11 +50,6 @@ void MainWindow::init_mqtt() {
     qDebug() << "MQTT Client error:" << error;
     });
     mqttClient->connectToHostEncrypted();
-}
-
-MainWindow::~MainWindow()
-{
-    std::cout << "Removing mainwindow" << std::endl;
 }
 
 void MainWindow::onMqttConnected() {
@@ -69,10 +69,9 @@ void MainWindow::onMessageReceived(const QByteArray &message, const QMqttTopicNa
     bool ok;
     double speed = message.toDouble(&ok); 
     if (ok) {
-        // If the message is valid speed, update the dial
         QMetaObject::invokeMethod(this, [this, speed]() {
             qDebug() << "Updating left dial with speed:" << speed;
-            left_dial->set_current(speed); // Update left dial with the speed
+            left_dial->set_current(speed);
         }, Qt::QueuedConnection);
     } else {
         qDebug() << "Invalid speed data received";

@@ -6,6 +6,9 @@
 #include <QHBoxLayout>
 #include <QProgressBar>
 #include <QLabel>
+#include <QFontDatabase>
+#include <QDir>
+#include <QCoreApplication>
 
 class AutonomyBar : public QWidget
 {
@@ -20,6 +23,7 @@ private:
     int current;
     QVector<QWidget*> sections;
     QHBoxLayout *layout;
+    QVBoxLayout *main_layout;
 };
 
 #endif // AutonomyBar_H

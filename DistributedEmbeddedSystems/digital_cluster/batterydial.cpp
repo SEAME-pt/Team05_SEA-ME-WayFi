@@ -3,30 +3,18 @@
 #include <QStyleOptionSlider>
 #include <QStylePainter>
 #include <QTimer>
-#include <QCoreApplication>
-#include <QDir>
 #include <QSettings>
 #include <QLinearGradient>
 #include <iostream>
 
 BatteryDial::BatteryDial(QWidget *parent)
-    : QWidget(parent), current(1), max(100)
+    : QWidget(parent), current(30), max(100)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
     setFixedSize(400, 400);
-    QString path = QCoreApplication::applicationDirPath();
-    QString digital_path = QDir(path).filePath("../digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
-    digital_path = QDir::cleanPath(digital_path);
-    QString calculator_path = QDir(path).filePath("../Calculator.ttf");
-    calculator_path = QDir::cleanPath(calculator_path);
-
-    font_id = font.addApplicationFont(digital_path);
-    font_id2 = font2.addApplicationFont(calculator_path);
 }
 
 BatteryDial::~BatteryDial() {
-    QFontDatabase::removeApplicationFont(font_id);
-    QFontDatabase::removeApplicationFont(font_id2);
     std::cout << "Remove custom dial" << std::endl;
 }
 
@@ -46,7 +34,7 @@ void BatteryDial::paintEvent(QPaintEvent *event) {
     QColor end_color(0, 255, 186);
     if (current < 50) {
         start_color = QColor(0, 65, 74); 
-        end_color = QColor(0, 228, 220, 255); 
+        end_color = QColor(0, 160, 200, 255); 
     }
     for (int i = 0; i < segments; ++i) {
         float t = static_cast<float>(i) / segments; //factor (0 to 1)

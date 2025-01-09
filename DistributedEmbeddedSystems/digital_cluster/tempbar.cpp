@@ -3,14 +3,12 @@
 TempBar::TempBar(QWidget *parent)
     : QWidget{parent}
 {
-    setFixedSize(300, 100); 
+    setFixedSize(300, 200); 
     QVBoxLayout* main_layout = new QVBoxLayout(this); 
-    main_layout->setContentsMargins(0, 0, 0, 0);
-    main_layout->setSpacing(10); 
+    main_layout->setSpacing(18); 
 
     layout = new QHBoxLayout();
     layout->setSpacing(1); 
-    layout->setContentsMargins(0, 0, 0, 0); 
     nb_sections = 10;
     for (int i = 0; i < nb_sections; ++i) {
         QWidget *section = new QWidget(this);
@@ -18,13 +16,13 @@ TempBar::TempBar(QWidget *parent)
         layout->addWidget(section);
         sections.append(section);
     }
-    main_layout->addLayout(layout);
+    main_layout->addLayout(layout, 1);
     set_temperature(50);
     QLabel *label = new QLabel(this);
     label->setText("🌡️");
-    label->setStyleSheet("font-size: 30px; color: rgb(0, 120, 140);");
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    label->setContentsMargins(0, 0, 10, 0);
+    label->setStyleSheet("font-size: 28px; color: rgb(0, 120, 140);");
+    label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    label->setContentsMargins(10, 0, 0, 0);
     main_layout->addWidget(label);
     setLayout(main_layout);
 }
