@@ -16,7 +16,7 @@ AutonomyBar::AutonomyBar(QWidget *parent)
         sections.append(section);
     }
     main_layout->addLayout(layout);
-    set_autonomy(60);
+    set_autonomy(40);
 }
 
 AutonomyBar::~AutonomyBar() {
@@ -28,22 +28,22 @@ void AutonomyBar::set_autonomy(int aut) {
     int sections_color = static_cast<int>((current / 120.0) * nb_sections);
     for (int i = 0; i < nb_sections; ++i) {
         if (i < sections_color) {
-            QColor sectionColor;
+            QColor section_color;
             if (current > 60) {
                 int red_value = 180 - (i * (200 / nb_sections)); 
                 int blue_value = 50 + (i * (160 / nb_sections));  
                 int green_value = 90 + (i * (150 / nb_sections)); 
-                sectionColor.setRgb(red_value, green_value, blue_value);
+                section_color.setRgb(red_value, green_value, blue_value);
             } else {
                 int red_value = 200 - (i * (255 / nb_sections));         
-                int green_value = 100 + (i * (180 / nb_sections)); 
-                int blue_value = 60 + (i * (255 / nb_sections));
-                sectionColor.setRgb(red_value, green_value, blue_value);
+                int green_value = 100 + (i * (230 / nb_sections)); 
+                int blue_value = 60 + (i * (240 / nb_sections));
+                section_color.setRgb(red_value, green_value, blue_value);
             } 
-            sections[i]->setStyleSheet(QString("background-color: %1").arg(sectionColor.name()));
+            sections[i]->setStyleSheet(QString("background-color: %1").arg(section_color.name()));
         } else {
-            QColor inactiveColor(22, 32, 90); 
-            sections[i]->setStyleSheet(QString("background-color: %1").arg(inactiveColor.name()));
+            QColor inactive_color(22, 32, 90); 
+            sections[i]->setStyleSheet(QString("background-color: %1").arg(inactive_color.name()));
         }
     }
     QLabel *label = new QLabel(this);

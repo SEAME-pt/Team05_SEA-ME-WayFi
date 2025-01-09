@@ -19,6 +19,8 @@ TempBar::TempBar(QWidget *parent)
     main_layout->addLayout(layout, 1);
     set_temperature(50);
     QLabel *label = new QLabel(this);
+    QFont font("Noto Sans");
+    label->setFont(font);
     label->setText("🌡️");
     label->setStyleSheet("font-size: 28px; color: rgb(0, 120, 140);");
     label->setAlignment(Qt::AlignTop | Qt::AlignLeft);

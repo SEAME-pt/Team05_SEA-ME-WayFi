@@ -9,7 +9,7 @@
 #include <iostream>
 
 CustomDial::CustomDial(QWidget *parent)
-    : QWidget(parent), current(1), max(7)
+    : QWidget(parent), current(1), max(12)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
     setFixedSize(400, 400);
@@ -55,7 +55,7 @@ void CustomDial::paintEvent(QPaintEvent *event) {
         painter.drawArc(10, 10, radius * 2, radius * 2, (225 - i * segment_angle) * 16, -segment_angle * 16);
     }
     painter.setPen(QPen(Qt::cyan));
-    painter.setFont(QFont("Digital-7", 100, QFont::Bold));
+    painter.setFont(QFont("Digital-7", 80, QFont::Bold));
     painter.drawText(rect(), Qt::AlignCenter, QString::number(current));
 
     painter.setPen(QPen(Qt::darkCyan));
@@ -65,7 +65,7 @@ void CustomDial::paintEvent(QPaintEvent *event) {
     painter.drawText(rect1, Qt::AlignCenter, "km/h");
 }
 
-void CustomDial::set_current(int n) {
+void CustomDial::set_current(float n) {
     current = n * 3.6;
     update();
 }
