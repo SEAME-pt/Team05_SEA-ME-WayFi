@@ -3,5 +3,6 @@
         "iostream": "cpp",
         "random": "cpp"
     },
-    "cmake.sourceDirectory": "/home/matilde/Team05_SEA-ME_DES/DistributedEmbeddedSystems/digital_cluster"
+    "cmake.sourceDirectory": "/home/matilde/Team05_SEA-ME_DES/DistributedEmbeddedSystems/digital_cluster",
+    "C_Cpp.errorSquiggles": "disabled"
 }

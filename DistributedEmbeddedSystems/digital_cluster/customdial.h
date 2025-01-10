@@ -14,8 +14,8 @@ class CustomDial : public QWidget
 public:
     CustomDial(QWidget *parent = nullptr);
     ~CustomDial();
-    void set_current(int n);
-    int get_current();
+    void set_current(float n);
+    void paint_text(QPainter &painter);
 protected:
     void paintEvent(QPaintEvent *event) override;
 

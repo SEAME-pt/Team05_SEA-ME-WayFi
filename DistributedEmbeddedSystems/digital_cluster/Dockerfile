@@ -40,6 +40,8 @@ RUN git clone -b 5.15 https://code.qt.io/qt/qtmqtt.git /qtmqtt && \
     make && \
     make install
 
+RUN apt-get update && apt-get install -y fonts-noto-core
+
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #Set working directory to /workspace

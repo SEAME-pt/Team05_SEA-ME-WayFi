@@ -16,7 +16,8 @@
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt>
 #include <QApplication>
-
+#include "tempbar.h"
+#include "autonomybar.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,18 +32,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    private slots:
-    //void publishMessage();  
+
+private slots:
     void onMqttConnected();
     void onMessageReceived(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
-    void onMqttStateChanged(QMqttClient::ClientState state);
     void init_mqtt();
 
 private:
     CustomDial *left_dial = nullptr;
     BatteryDial *right_dial = nullptr;
-    QVBoxLayout *layout = nullptr;
-    QWidget *centralWidget = nullptr;
     QMqttClient *mqttClient;
+    TempBar *temp;
+    AutonomyBar *autonomy;
+
 };
 #endif // MAINWINDOW_H
