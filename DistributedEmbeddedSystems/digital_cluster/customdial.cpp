@@ -63,6 +63,10 @@ void CustomDial::paintEvent(QPaintEvent *event) {
         painter.setPen(pen);
         painter.drawArc(10, 10, radius * 2, radius * 2, (270 - i * segment_angle) * 16, -segment_angle * 16);
     }
+    paint_text(painter);
+}
+
+void CustomDial::paint_text(QPainter &painter) {
     painter.setPen(QPen(Qt::cyan));
     painter.setFont(QFont("Digital-7", 80, QFont::Bold));
     QRect textRect = rect();

@@ -14,6 +14,7 @@ public:
     BatteryDial(QWidget *parent = nullptr);
     ~BatteryDial();
     void set_current(int n);
+    void paint_text(QPainter &painter);
 protected:
     void paintEvent(QPaintEvent *event) override;
 

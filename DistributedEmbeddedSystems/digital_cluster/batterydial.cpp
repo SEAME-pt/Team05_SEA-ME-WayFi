@@ -54,6 +54,10 @@ void BatteryDial::paintEvent(QPaintEvent *event) {
         painter.setPen(pen);
         painter.drawArc(10, 10, radius * 2, radius * 2, (270 + i * segment_angle) * 16, segment_angle * 16);
     }
+    paint_text(painter);
+}
+
+void BatteryDial::paint_text(QPainter &painter) {
     painter.setPen(QPen(QColor(0, 250, 195)));
     painter.setFont(QFont("Digital-7", 80, QFont::Bold));
     QRect textRect = rect();
@@ -76,6 +80,3 @@ void BatteryDial::set_current(int n) {
     current = n;
     update();
 }
-
-
-
