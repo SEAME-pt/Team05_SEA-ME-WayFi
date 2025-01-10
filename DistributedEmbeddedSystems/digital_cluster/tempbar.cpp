@@ -17,7 +17,7 @@ TempBar::TempBar(QWidget *parent)
         sections.append(section);
     }
     main_layout->addLayout(layout, 1);
-    set_temperature(50);
+    set_temperature(90);
     QLabel *label = new QLabel(this);
     QFont font("Noto Sans");
     label->setFont(font);
@@ -44,8 +44,8 @@ void TempBar::set_temperature(int temp) {
                 int green_value = 80 + (i * (100 / nb_sections)); //from dim cyan to regular cyan
                 sectionColor.setRgb(0, green_value, blue_value);
             } else {
-                int red_value = (i * (255 / nb_sections));         //increase red component
-                int green_value = 80 + (i * (8 / nb_sections));  //decrease green
+                int red_value = (i * (240 / nb_sections));         //increase red component
+                int green_value = 80 + (i * (10 / nb_sections));  //decrease green
                 int blue_value = 130 - (i * (90 / nb_sections));
                 sectionColor.setRgb(red_value, green_value, blue_value);
             }

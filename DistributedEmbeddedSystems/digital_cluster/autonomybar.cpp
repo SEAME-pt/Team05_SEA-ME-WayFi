@@ -16,7 +16,7 @@ AutonomyBar::AutonomyBar(QWidget *parent)
         sections.append(section);
     }
     main_layout->addLayout(layout);
-    set_autonomy(40);
+    set_autonomy(50);
 }
 
 AutonomyBar::~AutonomyBar() {
@@ -24,20 +24,19 @@ AutonomyBar::~AutonomyBar() {
 }
 
 void AutonomyBar::set_autonomy(int aut) {
-    current = aut;
-    int sections_color = static_cast<int>((current / 120.0) * nb_sections);
-    for (int i = 0; i < nb_sections; ++i) {
-        if (i < sections_color) {
+    int sections_color = static_cast<int>((aut / 120.0) * nb_sections);
+    for (int i = nb_sections -1; i >= 0; i--) {
+        if (i >= nb_sections - sections_color) {
             QColor section_color;
-            if (current > 60) {
-                int red_value = 180 - (i * (200 / nb_sections)); 
-                int blue_value = 50 + (i * (160 / nb_sections));  
-                int green_value = 90 + (i * (150 / nb_sections)); 
+            if (aut > 60) {
+                int red_value = 198 - ((nb_sections - 1 - i) * (255 / nb_sections)); 
+                int blue_value = 50 + ((nb_sections - 1 - i) * (160 / nb_sections));  
+                int green_value = 100 + ((nb_sections - 1 - i) * (160 / nb_sections)); 
                 section_color.setRgb(red_value, green_value, blue_value);
             } else {
-                int red_value = 200 - (i * (255 / nb_sections));         
-                int green_value = 100 + (i * (230 / nb_sections)); 
-                int blue_value = 60 + (i * (240 / nb_sections));
+                int red_value = 190 - ((nb_sections - 1 - i) * (255 / nb_sections));         
+                int green_value = 100 + ((nb_sections - 1 - i) * (250 / nb_sections)); 
+                int blue_value = 60 + ((nb_sections - 1 - i) * (230 / nb_sections));
                 section_color.setRgb(red_value, green_value, blue_value);
             } 
             sections[i]->setStyleSheet(QString("background-color: %1").arg(section_color.name()));
