@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     temp = new TempBar(this);
     autonomy = new AutonomyBar(this);
     QHBoxLayout* layoutbar = new QHBoxLayout();
-    layoutbar->setSpacing(100);
+    layoutbar->setSpacing(80);
     layoutbar->addWidget(temp, 1, Qt::AlignRight);
     layoutbar->addWidget(autonomy, 1, Qt::AlignLeft);
     mainlayout->addLayout(layoutbar, 1);
@@ -38,17 +38,20 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::init_mqtt() {
-    mqttClient->setHostname("972e24210b544ba49bfb9c1d3164d02b.s1.eu.hivemq.cloud");
-    mqttClient->setPort(8883);
-    mqttClient->setUsername("jetracer"); 
-    mqttClient->setPassword("Ft_seame5"); 
+    // mqttClient->setHostname("972e24210b544ba49bfb9c1d3164d02b.s1.eu.hivemq.cloud");
+    // mqttClient->setPort(8883);
+    // mqttClient->setUsername("jetracer"); 
+    // mqttClient->setPassword("Ft_seame5"); 
+    // mqttClient->setHostname("10.21.221.67");
+    mqttClient->setPort(1883);
+    mqttClient->setHostname("127.0.0.1");
 
     connect(mqttClient, &QMqttClient::connected, this, &MainWindow::onMqttConnected);
     connect(mqttClient, &QMqttClient::messageReceived, this, &MainWindow::onMessageReceived);
     connect(mqttClient, &QMqttClient::errorChanged, this, [](QMqttClient::ClientError error) {
     qDebug() << "MQTT Client error:" << error;
     });
-    mqttClient->connectToHostEncrypted();
+    mqttClient->connectToHost();
 }
 
 void MainWindow::onMqttConnected() {

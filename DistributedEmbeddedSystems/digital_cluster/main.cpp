@@ -11,6 +11,7 @@ int main(int argc, char *argv[])
     //QCoreApplication a(argc, argv);
     QApplication app(argc, argv);
     MainWindow w;
+    w.setWindowState(Qt::WindowFullScreen);
     w.show();
     return app.exec();
 }

@@ -8,7 +8,7 @@
 #include <iostream>
 
 BatteryDial::BatteryDial(QWidget *parent)
-    : QWidget(parent), current(70), max(100)
+    : QWidget(parent), current(0), max(100)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
     setFixedSize(400, 470);
@@ -18,6 +18,7 @@ BatteryDial::~BatteryDial() {
     std::cout << "Remove custom dial" << std::endl;
 }
 
+//fading
 void BatteryDial::paintEvent(QPaintEvent *event) {
     QPainter painter(this); 
     painter.setRenderHint(QPainter::Antialiasing, true);

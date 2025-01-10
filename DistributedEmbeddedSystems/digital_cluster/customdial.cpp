@@ -9,7 +9,7 @@
 #include <iostream>
 
 CustomDial::CustomDial(QWidget *parent)
-    : QWidget(parent), current(8), max(12)
+    : QWidget(parent), current(8), max(11)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
     setFixedSize(400, 470);
@@ -29,6 +29,7 @@ CustomDial::~CustomDial() {
     std::cout << "Remove custom dial" << std::endl;
 }
 
+//fading
 void CustomDial::paintEvent(QPaintEvent *event) {
     QPainter painter(this); 
     painter.setRenderHint(QPainter::Antialiasing);

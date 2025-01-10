@@ -20,7 +20,6 @@ public:
 
 private:
     int nb_sections;
-    int current;
     QVector<QWidget*> sections;
     QHBoxLayout *layout;
     QVBoxLayout *main_layout;

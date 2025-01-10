@@ -4,7 +4,7 @@ TempBar::TempBar(QWidget *parent)
     : QWidget{parent}
 {
     setFixedSize(300, 200); 
-    QVBoxLayout* main_layout = new QVBoxLayout(this); 
+    main_layout = new QVBoxLayout(); 
     main_layout->setSpacing(18); 
 
     layout = new QHBoxLayout();
@@ -17,37 +17,65 @@ TempBar::TempBar(QWidget *parent)
         sections.append(section);
     }
     main_layout->addLayout(layout, 1);
-    set_temperature(90);
-    QLabel *label = new QLabel(this);
-    QFont font("Noto Sans");
-    label->setFont(font);
-    label->setText("🌡️");
-    label->setStyleSheet("font-size: 28px; color: rgb(0, 120, 140);");
-    label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    label->setContentsMargins(10, 0, 0, 0);
-    main_layout->addWidget(label);
+    set_temperature(0);
     setLayout(main_layout);
 }
 
 TempBar::~TempBar() {
-    delete layout;
+    // delete main_layout;
+    // delete layout;
+    // delete layout_temp;
+}
+
+void TempBar::set_text(int temp) {
+    if (layout_temp) {
+        QLayoutItem* item;
+        while ((item = layout_temp->takeAt(0)) != nullptr) {
+            delete item->widget(); 
+            delete item;       
+        }
+        delete layout_temp;
+    }
+    layout_temp = new QHBoxLayout(); 
+    QLabel *label = new QLabel(this);
+    QFont font("Noto Sans");
+    label->setFont(font);
+    label->setText("🌡️");
+    label->setStyleSheet("font-size: 25px; color: rgb(0, 120, 140);");
+    layout_temp->addWidget(label);
+
+    QLabel *value = new QLabel(this);
+    QFont font1("Digital-7");
+    value->setFont(font1);
+    value->setText(QString::number(temp));
+    value->setStyleSheet("font-size: 25px; color: rgb(0, 120, 140);");
+    layout_temp->addWidget(value);
+
+    QLabel *unit = new QLabel(this);
+    QFont font2("Calculator");
+    unit->setFont(font2);
+    unit->setText("\u00B0 C");
+    unit->setStyleSheet("font-size: 23px; color: rgb(0, 120, 140);");
+    layout_temp->addWidget(unit);
+    layout_temp->setContentsMargins(10, 0, 0, 0);
+    layout_temp->setAlignment(Qt::AlignTop |Qt::AlignLeft);
+    main_layout->addLayout(layout_temp);
 }
 
 void TempBar::set_temperature(int temp) {
-    current = temp;
-    int sections_color = static_cast<int>((current / 100.0) * nb_sections);
+    int sections_color = static_cast<int>((temp / 100.0) * nb_sections);
     for (int i = 0; i < nb_sections; ++i) {
         if (i < sections_color) {
             QColor sectionColor;
-            if (current < 70) {
-                int blue_value = 170 + (i * (150 / nb_sections));  //dim blueincrease to bright blue
-                int green_value = 80 + (i * (100 / nb_sections)); //from dim cyan to regular cyan
-                sectionColor.setRgb(0, green_value, blue_value);
+            if (temp < 70) {
+                int blue = 170 + (i * (150 / nb_sections));  //dim blueincrease to bright blue
+                int green = 80 + (i * (100 / nb_sections)); //from dim cyan to regular cyan
+                sectionColor.setRgb(0, green, blue);
             } else {
-                int red_value = (i * (240 / nb_sections));         //increase red component
-                int green_value = 80 + (i * (10 / nb_sections));  //decrease green
-                int blue_value = 130 - (i * (90 / nb_sections));
-                sectionColor.setRgb(red_value, green_value, blue_value);
+                int red = (i * (240 / nb_sections));         //increase red component
+                int green = 80 + (i * (10 / nb_sections));  //decrease green
+                int blue = 130 - (i * (90 / nb_sections));
+                sectionColor.setRgb(red, green, blue);
             }
             sections[i]->setStyleSheet(QString("background-color: %1").arg(sectionColor.name()));
         } else {
@@ -55,6 +83,7 @@ void TempBar::set_temperature(int temp) {
             sections[i]->setStyleSheet(QString("background-color: %1").arg(inactive.name()));
         }
     }
+    set_text(temp);
     // QPixmap pixmap(":/resources/thermometer.png");
     // QLabel *iconLabel = new QLabel(this);
     // iconLabel->setPixmap(pixmap);
