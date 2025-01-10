@@ -19,7 +19,7 @@ BatteryDial::~BatteryDial() {
 }
 
 void BatteryDial::paintEvent(QPaintEvent *event) {
-    QPainter painter(this);  //create qpainter object
+    QPainter painter(this); 
     painter.setRenderHint(QPainter::Antialiasing, true);
     int radius = qMin(width(), height()) / 2 - 10;  
     int segments = 300; 
@@ -30,9 +30,8 @@ void BatteryDial::paintEvent(QPaintEvent *event) {
         QColor color(0, 52, 50, alpha); 
         QPen pen(color, 20);
         painter.setPen(pen);
-        float overlap_factor = 1.1f; 
-        painter.drawArc(10, 10, radius * 2, radius * 2, (180 - i * segment_angle1) * 16, 
-                        -segment_angle1 * 16 * overlap_factor);
+        float overlap = 1.1f; 
+        painter.drawArc(10, 10, radius * 2, radius * 2, (180 - i * segment_angle) * 16, -segment_angle * 16 * overlap);
     }
     float angle_progress = (static_cast<float>(current) * 270.0f) / max;
     segment_angle = angle_progress / segments;

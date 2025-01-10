@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
     layoutbar->setSpacing(100);
     layoutbar->addWidget(temp, 1, Qt::AlignRight);
     layoutbar->addWidget(autonomy, 1, Qt::AlignLeft);
-    //layoutbar->setContentsMargins(0, 10, 0, 0);
     mainlayout->addLayout(layoutbar, 1);
     QWidget* centralWidget = new QWidget(this);
     centralWidget->setLayout(mainlayout);
@@ -56,7 +55,11 @@ void MainWindow::onMqttConnected() {
     qDebug() << "Connected to MQTT broker";
     QMqttTopicFilter topic("jetracer/speed");
     auto subscription = mqttClient->subscribe(topic);
-    if (!subscription) {
+    QMqttTopicFilter battery("jetracer/battery");
+    auto subscribe = mqttClient->subscribe(battery);
+    QMqttTopicFilter temp("jetracer/temperature");
+    auto sub = mqttClient->subscribe(temp);
+    if (!subscription || !sub | !subscribe) {
         qDebug() << "Failed to subscribe to topic";
     } else {
         qDebug() << "Successfully subscribed to topic";
@@ -67,13 +70,27 @@ void MainWindow::onMessageReceived(const QByteArray &message, const QMqttTopicNa
 {
     qDebug() << "Message received on topic" << topic.name() << ":" << message;
     bool ok;
-    double speed = message.toDouble(&ok); 
+    double msg = message.toDouble(&ok); 
     if (ok) {
-        QMetaObject::invokeMethod(this, [this, speed]() {
-            qDebug() << "Updating left dial with speed:" << speed;
-            left_dial->set_current(speed);
-        }, Qt::QueuedConnection);
+        if (topic.name() == "jetracer/speed") {
+            QMetaObject::invokeMethod(this, [this, msg]() {
+                qDebug() << "Updating speed: " << msg;
+                left_dial->set_current(msg);
+            }, Qt::QueuedConnection);
+        }
+        else if (topic.name() == "jetracer/battery") {
+            QMetaObject::invokeMethod(this, [this, msg]() {
+                qDebug() << "Updating battery: " << msg;
+                right_dial->set_current(msg);
+            }, Qt::QueuedConnection);
+        }
+        else if (topic.name() == "jetracer/temperature") {
+            QMetaObject::invokeMethod(this, [this, msg]() {
+                qDebug() << "Updating temperature: " << msg;
+                temp->set_temperature(msg);
+            }, Qt::QueuedConnection);
+        }
     } else {
-        qDebug() << "Invalid speed data received";
+        qDebug() << "Invalid data received";
     }
 }

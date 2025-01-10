@@ -11,7 +11,7 @@ AutonomyBar::AutonomyBar(QWidget *parent)
     nb_sections = 10;
     for (int i = 0; i < nb_sections; ++i) {
         QWidget *section = new QWidget(this);
-        section->setFixedSize(20, 30); //rectangular section
+        section->setFixedSize(20, 30); //rectangular 
         layout->addWidget(section);
         sections.append(section);
     }

@@ -41,9 +41,8 @@ void CustomDial::paintEvent(QPaintEvent *event) {
         QColor color(0, 40, 60, alpha); 
         QPen pen(color, 20);
         painter.setPen(pen);
-        float overlap_factor = 1.1f; 
-        painter.drawArc(10, 10, radius * 2, radius * 2, (270 - i * segment_angle1) * 16, 
-                        -segment_angle1 * 16 * overlap_factor);
+        float overlap = 1.1f; 
+        painter.drawArc(10, 10, radius * 2, radius * 2, (270 - i * segment_angle) * 16, -segment_angle * 16 * overlap);
     }
 
     float angle_progress = (static_cast<float>(current) * 270.0f) / max;
@@ -78,8 +77,3 @@ void CustomDial::set_current(float n) {
     current = n * 3.6;
     update();
 }
-
-int CustomDial::get_current() {
-    return current;
-}
-
