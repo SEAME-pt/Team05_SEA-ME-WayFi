@@ -32,6 +32,9 @@ jobs:
       # Mover arquivos HTML para a raiz
       - name: Move HTML Files to Root
         run: |
+          if [ -d "./html" ]; then
+            rm -rf ./html
+          fi
           mv html/* ./
           rm -rf html
 
