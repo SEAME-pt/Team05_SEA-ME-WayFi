@@ -1,4 +1,4 @@
-OUTPUT_DIRECTORY       = html
+OUTPUT_DIRECTORY       = .
 GENERATE_HTML          = YES
 HTML_OUTPUT            = .
 GENERATE_LATEX         = NO
