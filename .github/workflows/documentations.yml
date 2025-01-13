@@ -26,23 +26,12 @@ jobs:
 
       # Gerar documentação
       - name: Generate Documentation
-        run: |
-          doxygen Doxyfile
+        run: doxygen Doxyfile
 
-      # Mover arquivos HTML para o diretório /docs
-      - name: Move HTML Files to Docs Directory
-        run: |
-          if [ -d "./docs" ]; then
-            rm -rf ./docs
-          fi
-          mkdir ./docs
-          mv html/* ./docs
-          rm -rf html
-
-      # Fazer upload da documentação para o GitHub Pages
+      # Fazer upload da documentação para o branch gh-pages
       - name: Deploy Documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
-          publish_dir: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
           force_orphan: true
