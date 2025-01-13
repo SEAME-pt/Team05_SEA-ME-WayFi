@@ -18,19 +18,29 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Instalar dependências do CMake e Qt
-      - name: Install Dependencies
+      # Instalar dependências do CMake e Qt base
+      - name: Install Base Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools qt5-mqtt-dev
+          sudo apt-get install -y cmake g++ qtbase5-dev qttools5-dev-tools
+
+      # Clonar e compilar o módulo Qt MQTT
+      - name: Compile and Install Qt MQTT Module
+        run: |
+          git clone https://github.com/qt/qtmqtt.git
+          cd qtmqtt
+          mkdir build && cd build
+          cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+          make -j$(nproc)
+          sudo make install
 
       # Configurar e construir o projeto
-      - name: Configure and Build
+      - name: Configure and Build Project
         run: |
           mkdir -p DistributedEmbeddedSystems/digital_cluster/build
           cd DistributedEmbeddedSystems/digital_cluster/build
-          cmake .. -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5
-          make
+          cmake .. -DCMAKE_PREFIX_PATH=/usr
+          make -j$(nproc)
 
       # Executar o script automate.sh (se necessário)
       - name: Run Automate Script
@@ -38,6 +48,6 @@ jobs:
           chmod +x DistributedEmbeddedSystems/digital_cluster/automate.sh
           DistributedEmbeddedSystems/digital_cluster/automate.sh
 
-      # Testar ou validar saída do projeto (adapte conforme necessário)
+      # Testar ou validar saída do projeto
       - name: Run Tests
         run: echo "No tests configured yet"
