@@ -18,16 +18,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Instalar dependências do CMake
+      # Instalar dependências do CMake e Qt
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake g++
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
 
       # Configurar e construir o projeto
       - name: Configure and Build
         run: |
           mkdir -p DistributedEmbeddedSystems/digital_cluster/build
           cd DistributedEmbeddedSystems/digital_cluster/build
-          cmake ..
+          cmake .. -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt5
           make
 
       # Executar o script automate.sh (se necessário)
