@@ -29,13 +29,14 @@ jobs:
         run: |
           doxygen Doxyfile
 
-      # Mover arquivos HTML para a raiz
-      - name: Move HTML Files to Root
+      # Mover arquivos HTML para o diretório /docs
+      - name: Move HTML Files to Docs Directory
         run: |
-          if [ -d "./html" ]; then
-            rm -rf ./html
+          if [ -d "./docs" ]; then
+            rm -rf ./docs
           fi
-          mv html/* ./
+          mkdir ./docs
+          mv html/* ./docs
           rm -rf html
 
       # Fazer upload da documentação para o GitHub Pages
@@ -43,5 +44,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./docs
           force_orphan: true
