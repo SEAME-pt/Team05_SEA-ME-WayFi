@@ -3,10 +3,10 @@ name: Generate Documentation
 on:
   push:
     branches:
-      - '**' # Gera documentação para qualquer branch
+      - '**'
   pull_request:
     branches:
-      - '**' # Também gera para PRs
+      - '**'
 
 jobs:
   generate-docs:
@@ -29,11 +29,16 @@ jobs:
         run: |
           doxygen Doxyfile
 
+      # Mover arquivos HTML para a raiz
+      - name: Move HTML Files to Root
+        run: |
+          mv html/* ./
+          rm -rf html
+
       # Fazer upload da documentação para o GitHub Pages
       - name: Deploy Documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
-          publish_dir: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
           force_orphan: true
-
