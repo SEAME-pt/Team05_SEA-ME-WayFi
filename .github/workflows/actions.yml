@@ -1,0 +1,41 @@
+name: Actions Workflow
+
+on:
+  push:
+    branches:
+      - '**'  # Nome da branch que irá disparar o workflow
+  pull_request:
+    branches:
+      - '**'  # Também executa em PRs para qualquer branch
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout do código
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Instalar dependências do CMake
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake g++
+
+      # Configurar e construir o projeto
+      - name: Configure and Build
+        run: |
+          mkdir -p DistributedEmbeddedSystems/digital_cluster/build
+          cd DistributedEmbeddedSystems/digital_cluster/build
+          cmake ..
+          make
+
+      # Executar o script automate.sh (se necessário)
+      - name: Run Automate Script
+        run: |
+          chmod +x DistributedEmbeddedSystems/digital_cluster/automate.sh
+          DistributedEmbeddedSystems/digital_cluster/automate.sh
+
+      # Testar ou validar saída do projeto (adapte conforme necessário)
+      - name: Run Tests
+        run: echo "No tests configured yet"
