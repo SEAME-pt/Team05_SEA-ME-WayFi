@@ -22,24 +22,14 @@ jobs:
       - name: Install Base Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ qtbase5-dev qttools5-dev-tools
-
-      # Clonar e compilar o módulo Qt MQTT
-      - name: Compile and Install Qt MQTT Module
-        run: |
-          git clone https://github.com/qt/qtmqtt.git
-          cd qtmqtt
-          mkdir build && cd build
-          cmake .. -DCMAKE_INSTALL_PREFIX=/usr
-          make -j$(nproc)
-          sudo make install
+          sudo apt-get install -y cmake g++ qt6-base-dev qt6-tools-dev qt6-mqtt-dev
 
       # Configurar e construir o projeto
       - name: Configure and Build Project
         run: |
           mkdir -p DistributedEmbeddedSystems/digital_cluster/build
           cd DistributedEmbeddedSystems/digital_cluster/build
-          cmake .. -DCMAKE_PREFIX_PATH=/usr
+          cmake .. -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6
           make -j$(nproc)
 
       # Executar o script automate.sh (se necessário)
