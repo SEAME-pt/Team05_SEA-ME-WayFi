@@ -3,10 +3,10 @@ name: Actions Workflow
 on:
   push:
     branches:
-      - '**'  # Nome da branch que irá disparar o workflow
+      - '**'
   pull_request:
     branches:
-      - '**'  # Também executa em PRs para qualquer branch
+      - '**'
 
 jobs:
   build:
@@ -18,18 +18,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Instalar dependências do CMake e Qt base
+      # Instalar dependências básicas
       - name: Install Base Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ qt6-base-dev qt6-tools-dev qt6-mqtt-dev
+          sudo apt-get install -y cmake g++ libgl1-mesa-dev
+
+      # Baixar e instalar o Qt6 via instalador oficial
+      - name: Install Qt6 and MQTT
+        run: |
+          wget https://download.qt.io/official_releases/qt/6.5/6.5.2/qt-opensource-linux-x64-6.5.2.run -O qt-installer.run
+          chmod +x qt-installer.run
+          ./qt-installer.run --silent --accept-licenses --root /opt/qt
 
       # Configurar e construir o projeto
       - name: Configure and Build Project
         run: |
+          export PATH="/opt/qt/6.5.2/gcc_64/bin:$PATH"
           mkdir -p DistributedEmbeddedSystems/digital_cluster/build
           cd DistributedEmbeddedSystems/digital_cluster/build
-          cmake .. -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/cmake/Qt6
+          cmake .. -DCMAKE_PREFIX_PATH=/opt/qt/6.5.2/gcc_64
           make -j$(nproc)
 
       # Executar o script automate.sh (se necessário)
