@@ -18,26 +18,36 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Instalar dependências básicas
-      - name: Install Base Dependencies
+      # Instalar dependências básicas para compilação
+      - name: Install Build Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libgl1-mesa-dev
+          sudo apt-get install -y cmake g++ build-essential libgl1-mesa-dev libxcb-glx0-dev libx11-xcb-dev libxcb-keysyms1-dev \
+          libxcb-image0-dev libxcb-shm0-dev libxcb-icccm4-dev libxcb-sync-dev libxcb-xfixes0-dev libxrender-dev \
+          libxrandr-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev python3 zip
 
-      # Baixar e instalar o Qt6 via instalador oficial
-      - name: Install Qt6 and MQTT
+      # Baixar o código-fonte do Qt
+      - name: Download Qt Source
         run: |
-          wget https://download.qt.io/official_releases/qt/6.5/6.5.2/qt-opensource-linux-x64-6.5.2.run -O qt-installer.run
-          chmod +x qt-installer.run
-          ./qt-installer.run --silent --accept-licenses --root /opt/qt
+          wget https://download.qt.io/official_releases/qt/6.5/6.5.2/single/qt-everywhere-src-6.5.2.tar.xz
+          tar -xf qt-everywhere-src-6.5.2.tar.xz
+
+      # Compilar e instalar o Qt
+      - name: Build and Install Qt
+        run: |
+          cd qt-everywhere-src-6.5.2
+          mkdir build && cd build
+          ../configure -prefix /opt/qt -opensource -confirm-license -nomake examples -nomake tests
+          make -j$(nproc)
+          sudo make install
 
       # Configurar e construir o projeto
       - name: Configure and Build Project
         run: |
-          export PATH="/opt/qt/6.5.2/gcc_64/bin:$PATH"
+          export PATH="/opt/qt/bin:$PATH"
           mkdir -p DistributedEmbeddedSystems/digital_cluster/build
           cd DistributedEmbeddedSystems/digital_cluster/build
-          cmake .. -DCMAKE_PREFIX_PATH=/opt/qt/6.5.2/gcc_64
+          cmake .. -DCMAKE_PREFIX_PATH=/opt/qt
           make -j$(nproc)
 
       # Executar o script automate.sh (se necessário)
