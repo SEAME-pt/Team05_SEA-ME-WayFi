@@ -1,5 +1,5 @@
 #include <SPI.h>
-#include "mcp2515_can.h"
+#include "mcp2515_can.h" //CAN_BUS_Shield, by seed studio
 
 // Pin where the speed sensor is connected
 const int sensorPin = 3;
@@ -7,7 +7,7 @@ const int sensorPin = 3;
 // Variables for pulse counting and timing
 volatile unsigned long pulseCount = 0;  // Pulse counter
 unsigned long previousMillis = 0;       // Stores the last update time
-const long interval = 1000;             // Interval to calculate speed (in ms)
+const long interval = 250;             // Interval to calculate speed (in ms)
 
 // Wheel and sensor parameters
 const float wheelDiameter = 0.067;  // Diameter of the wheel (in meters)
@@ -58,7 +58,8 @@ void loop() {
     float distancePerPulse = (PI * wheelDiameter) / pulsesPerRevolution;
 
     // Calculate the speed in meters per second (m/s)
-    float speed_mps = pulsesThisSecond * distancePerPulse;
+    //float speed_mps = pulsesThisSecond * distancePerPulse;
+    float speed_mps = (pulsesThisSecond * distancePerPulse) * (1000.0 / interval);
 
     // Print the speed to the Serial Monitor
     Serial.print("\nSpeed (m/s): ");
