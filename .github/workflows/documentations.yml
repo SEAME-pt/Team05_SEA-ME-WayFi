@@ -30,9 +30,12 @@ jobs:
 
       # Commit e push da documentação gerada
       - name: Commit and Push Documentation
+        env:
+          TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
           git commit -m "Update documentation [skip ci]" || echo "No changes to commit"
-          git push origin ${{ github.ref }}
+          git push https://x-access-token:${TOKEN}@github.com/<owner>/<repo>.git HEAD:${{ github.ref }}
+
