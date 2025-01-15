@@ -28,6 +28,7 @@ jobs:
       - name: Generate Documentation
         run: doxygen Doxyfile
 
+        
       # Commit e push da documentação gerada
       - name: Commit and Push Documentation
         env:
@@ -38,4 +39,3 @@ jobs:
           git add .
           git commit -m "Update documentation [skip ci]" || echo "No changes to commit"
           git push https://x-access-token:${TOKEN}@github.com/<owner>/<repo>.git HEAD:${{ github.ref }}
-
