@@ -28,9 +28,9 @@ jobs:
       - name: Generate Documentation
         run: doxygen Doxyfile
 
-      # Fazer upload da documentação para o branch doxygen
+      # Fazer upload da documentação para o branch gh-pages
       - name: Deploy Documentation to GitHub Pages
-        uses: peaceiris/actions-doxygen@v3
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: .
