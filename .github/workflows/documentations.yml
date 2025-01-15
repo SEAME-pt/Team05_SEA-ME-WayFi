@@ -18,20 +18,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Instalar Doxygen
+      # Instalar Doxygen e Graphviz (dependência do Doxygen)
       - name: Install Doxygen
         run: |
           sudo apt-get update
           sudo apt-get install -y doxygen graphviz
 
-      # Gerar documentação
+      # Gerar a documentação com o Doxygen
       - name: Generate Documentation
         run: doxygen Doxyfile
 
-      # Fazer upload da documentação para o branch gh-pages
-      - name: Deploy Documentation to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.PAT_TOKEN }}
-          publish_dir: .
-          force_orphan: true
+      # Commit e push da documentação gerada
+      - name: Commit and Push Documentation
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update documentation [skip ci]" || echo "No changes to commit"
+          git push origin ${{ github.ref }}
