@@ -115,11 +115,11 @@ The JetCar project architecture is modular, scalable, and designed to provide pr
 ---
 
 
-# Arquitetura do Projeto JetCar
+# Arquitetura do Código dos Motores
 
 ## Visão Geral
 
-A arquitetura do projeto JetCar consiste em diversos componentes que trabalham juntos para controlar um carro robótico usando servos, motores DC e um joystick. O principal foco da arquitetura é gerenciar interfaces de hardware via o protocolo I2C, lidar com entradas do joystick usando SDL2 e fornecer um mecanismo de controle responsivo.
+A arquitetura do Código dos Motores consiste em diversos componentes que trabalham juntos para controlar um carro robótico usando servos, motores DC e um joystick. O principal foco da arquitetura é gerenciar interfaces de hardware via o protocolo I2C, lidar com entradas do joystick usando SDL2 e fornecer um mecanismo de controle responsivo.
 
 ---
 
