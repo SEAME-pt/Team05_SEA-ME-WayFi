@@ -1,5 +1,5 @@
-#ifndef TEMPBAR_H
-#define TEMPBAR_H
+#ifndef TEMPERATURE_H
+#define TEMPERATURE_H
 
 #include <QObject>
 #include <QWidget>
@@ -7,12 +7,12 @@
 #include <QProgressBar>
 #include <QLabel>
 
-class TempBar : public QWidget
+class Temperature : public QWidget
 {
     Q_OBJECT
 public:
-    TempBar(QWidget *parent = nullptr);
-    ~TempBar();
+    Temperature(QWidget *parent = nullptr);
+    ~Temperature();
     void set_temperature(int i);
     void set_text(int temp);
 
@@ -21,7 +21,7 @@ private:
     QVector<QWidget*> sections;
     QHBoxLayout *layout;
     QVBoxLayout* main_layout;
-    QHBoxLayout* layout_temp = nullptr;
+    QLabel *label = nullptr;
 };
 
-#endif // TEMPBAR_H
+#endif // Temperature_H

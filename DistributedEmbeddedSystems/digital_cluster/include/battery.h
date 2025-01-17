@@ -1,5 +1,5 @@
-#ifndef BATTERYDIAL_H
-#define BATTERYDIAL_H
+#ifndef BATTERY_H
+#define BATTERY_H
 
 #include <QWidget>
 #include <QPainter>
@@ -7,12 +7,12 @@
 #include <QBrush>
 #include <QTimer>
 
-class BatteryDial : public QWidget
+class Battery : public QWidget
 {
     Q_OBJECT
 public:
-    BatteryDial(QWidget *parent = nullptr);
-    ~BatteryDial();
+    Battery(QWidget *parent = nullptr);
+    ~Battery();
     void set_current(int n);
     void paint_text(QPainter &painter);
 protected:
@@ -21,7 +21,6 @@ protected:
 private:
     int current;
     const int max;
-signals:
 };
 
-#endif // BATTERYDIAL_H
+#endif // BATTERY_H

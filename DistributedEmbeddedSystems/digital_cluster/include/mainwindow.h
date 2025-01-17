@@ -3,12 +3,9 @@
 
 #include <QMainWindow>
 #include <cstdio>
-#include <QTimer>
-#include <QProcess>
 #include <cstdlib>
-#include <QThread>
-#include "customdial.h"
-#include "batterydial.h"
+#include "speed.h"
+#include "battery.h"
 #include <QVBoxLayout>
 #include <QtMqtt/QtMqtt>
 #include <QtMqtt/QMqttClient>
@@ -16,8 +13,8 @@
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt>
 #include <QApplication>
-#include "tempbar.h"
-#include "autonomybar.h"
+#include "temperature.h"
+#include "autonomy.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,11 +36,11 @@ private slots:
     void init_mqtt();
 
 private:
-    CustomDial *left_dial = nullptr;
-    BatteryDial *right_dial = nullptr;
+    Speed *left_dial = nullptr;
+    Battery *right_dial = nullptr;
     QMqttClient *mqttClient;
-    TempBar *temp;
-    AutonomyBar *autonomy;
+    Temperature *temp;
+    Autonomy *autonomy;
 
 };
 #endif // MAINWINDOW_H

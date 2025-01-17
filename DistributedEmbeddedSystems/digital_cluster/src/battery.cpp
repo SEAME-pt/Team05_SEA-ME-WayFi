@@ -1,25 +1,24 @@
-#include "batterydial.h"
-#include <QtMath>
-#include <QStyleOptionSlider>
-#include <QStylePainter>
-#include <QTimer>
+#include "../include/battery.h"
 #include <QSettings>
-#include <QLinearGradient>
 #include <iostream>
+#include <QPixmap>
+#include <QDebug>
+#include <QDir>
+#include <QCoreApplication>
 
-BatteryDial::BatteryDial(QWidget *parent)
-    : QWidget(parent), current(0), max(100)
+Battery::Battery(QWidget *parent)
+    : QWidget(parent), current(20), max(100)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
     setFixedSize(400, 470);
 }
 
-BatteryDial::~BatteryDial() {
-    std::cout << "Remove custom dial" << std::endl;
+Battery::~Battery() {
+    std::cout << "Remove battery" << std::endl;
 }
 
 //fading
-void BatteryDial::paintEvent(QPaintEvent *event) {
+void Battery::paintEvent(QPaintEvent *event) {
     QPainter painter(this); 
     painter.setRenderHint(QPainter::Antialiasing, true);
     int radius = qMin(width(), height()) / 2 - 10;  
@@ -39,6 +38,7 @@ void BatteryDial::paintEvent(QPaintEvent *event) {
     QColor start_color(0, 65, 74); 
     QColor end_color(0, 255, 200);
     if (current < 40) {
+        segments = 200;
         start_color = QColor(0, 65, 74); 
         end_color = QColor(0, 140, 150, 255); 
     }
@@ -58,26 +58,43 @@ void BatteryDial::paintEvent(QPaintEvent *event) {
     paint_text(painter);
 }
 
-void BatteryDial::paint_text(QPainter &painter) {
+void Battery::paint_text(QPainter &painter) {
     painter.setPen(QPen(QColor(0, 250, 195)));
-    painter.setFont(QFont("Digital-7", 80, QFont::Bold));
+    painter.setFont(QFont("Digital-7", width() / 4, QFont::Bold));
     QRect textRect = rect();
     textRect.translate(0, -20); 
     painter.drawText(textRect, Qt::AlignCenter, QString::number(current));
 
-    painter.setPen(QPen(QColor(0, 250, 195, 150)));
-    QFont font("Digital-7", 30);
-    painter.setFont(font);
-    QRect percentage = rect();
-    percentage.setWidth(percentage.width() - 80);
-    painter.drawText(percentage, Qt::AlignCenter | Qt::AlignRight, "%");
+    QString path = QCoreApplication::applicationDirPath();
+    QString digital_path = QDir(path).filePath("../fonts_icon/charging-station.png"); //change this dir, take out the ../ when sending to jetson
+    digital_path = QDir::cleanPath(digital_path);
+    QPixmap pixmap(digital_path);  
+    QImage img = pixmap.toImage();
+    for (int x = 0; x < img.width(); ++x) {
+        for (int y = 0; y < img.height(); ++y) {
+            QColor color = img.pixelColor(x, y);
+            if (color == QColor(0, 0, 0)) { 
+                color.setRgb(0, 120, 100); 
+                img.setPixelColor(x, y, color);
+            }
+        }
+    }
+    pixmap.convertFromImage(img);
+    pixmap = pixmap.scaled(35, 35, Qt::KeepAspectRatio);
+    QRect rectBottom = this->rect();
+    int yPos = rectBottom.bottom() - pixmap.height() - 10; // Position at the bottom
+    QRect bottomRect = QRect((rectBottom.width() - pixmap.width()) / 2, yPos, pixmap.width(), pixmap.height());
+    painter.drawPixmap(bottomRect, pixmap);
 
-    painter.setPen(QPen(QColor(0, 255, 160, 150)));
-    painter.setFont(QFont("Calculator", 25));
-    painter.drawText(rect(), Qt::AlignBottom | Qt::AlignCenter, "Power");
+    QFont font("Calculator", width() / 18);
+    painter.setFont(font);
+    painter.setPen(QPen(QColor(0, 120, 100)));
+    int xPos = bottomRect.right() + 10; 
+    painter.drawText(xPos, yPos + 35, "%");
+ 
 }
 
-void BatteryDial::set_current(int n) {
+void Battery::set_current(int n) {
     current = n;
     update();
 }

@@ -1,21 +1,19 @@
-#ifndef AUTONOMYBAR_H
-#define AUTONOMYBAR_H
+#ifndef AUTONOMY_H
+#define AUTONOMY_H
 
 #include <QObject>
 #include <QWidget>
 #include <QHBoxLayout>
-#include <QProgressBar>
 #include <QLabel>
-#include <QFontDatabase>
 #include <QDir>
 #include <QCoreApplication>
 
-class AutonomyBar : public QWidget
+class Autonomy : public QWidget
 {
     Q_OBJECT
 public:
-    AutonomyBar(QWidget *parent = nullptr);
-    ~AutonomyBar();
+    Autonomy(QWidget *parent = nullptr);
+    ~Autonomy();
     void set_autonomy(int i);
 
 private:
@@ -23,6 +21,7 @@ private:
     QVector<QWidget*> sections;
     QHBoxLayout *layout;
     QVBoxLayout *main_layout;
+    QLabel *label;
 };
 
-#endif // AutonomyBar_H
+#endif // Autonomy_H

@@ -1,6 +1,6 @@
-#include "autonomybar.h"
+#include "../include/autonomy.h"
 
-AutonomyBar::AutonomyBar(QWidget *parent)
+Autonomy::Autonomy(QWidget *parent)
     : QWidget{parent}
 {
     setFixedSize(300, 200); 
@@ -16,14 +16,15 @@ AutonomyBar::AutonomyBar(QWidget *parent)
         sections.append(section);
     }
     main_layout->addLayout(layout);
+    label = new QLabel(this);
     set_autonomy(80);
 }
 
-AutonomyBar::~AutonomyBar() {
+Autonomy::~Autonomy() {
     delete layout;
 }
 
-void AutonomyBar::set_autonomy(int aut) {
+void Autonomy::set_autonomy(int aut) {
     int sections_color = static_cast<int>((aut / 120.0) * nb_sections);
     for (int i = nb_sections -1; i >= 0; i--) {
         if (i >= nb_sections - sections_color) {
@@ -45,9 +46,9 @@ void AutonomyBar::set_autonomy(int aut) {
             sections[i]->setStyleSheet(QString("background-color: %1").arg(inactive_color.name()));
         }
     }
-    QLabel *label = new QLabel(this);
-    label->setFont(QFont("Calculator", 27));
-    label->setText(QString("km"));
+    label->setTextFormat(Qt::RichText); // Enable rich text
+    label->setText("<span style='font-family: Digital-7; font-size: 27px;'>" + QString::number(aut) + 
+        "</span><span style='font-family: Calculator; font-size: 27px;'> km</span>");
     label->setStyleSheet("color: rgb(0, 120, 140);");
     label->setAlignment(Qt::AlignTop | Qt::AlignRight);
     label->setContentsMargins(0, 0, 10, 0);

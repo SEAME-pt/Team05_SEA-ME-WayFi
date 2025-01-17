@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "random": "cpp",
+        "qapplication": "cpp",
+        "algorithm": "cpp"
+    }
+}
