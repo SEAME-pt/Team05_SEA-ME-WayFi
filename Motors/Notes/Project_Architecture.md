@@ -1,7 +1,7 @@
-# Engine Codes Architecture
+# Engine codes - Architecture
 
 ## Overview
-The Engine Codes architecture consists of several components that work together to control a robotic car using servos, DC motors, and a joystick. The primary focus of the architecture is to manage hardware interfaces via the I2C protocol, handle joystick inputs using SDL2, and provide a responsive control mechanism.
+The Engine codes architecture consists of several components that work together to control a robotic car using servos, DC motors, and a joystick. The primary focus of the architecture is to manage hardware interfaces via the I2C protocol, handle joystick inputs using SDL2, and provide a responsive control mechanism.
 
 ---
 
@@ -115,11 +115,11 @@ The JetCar project architecture is modular, scalable, and designed to provide pr
 ---
 
 
-# Arquitetura do Código dos Motores
+# Códigos dos Motores - Arquitetura
 
 ## Visão Geral
 
-A arquitetura do Código dos Motores consiste em diversos componentes que trabalham juntos para controlar um carro robótico usando servos, motores DC e um joystick. O principal foco da arquitetura é gerenciar interfaces de hardware via o protocolo I2C, lidar com entradas do joystick usando SDL2 e fornecer um mecanismo de controle responsivo.
+A arquitetura do Códigos dos Motores consiste em diversos componentes que trabalham juntos para controlar um carro robótico usando servos, motores DC e um joystick. O principal foco da arquitetura é gerenciar interfaces de hardware via o protocolo I2C, lidar com entradas do joystick usando SDL2 e fornecer um mecanismo de controle responsivo.
 
 ---
 
