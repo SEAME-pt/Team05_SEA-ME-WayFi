@@ -108,13 +108,6 @@ The project follows a layered architecture:
 
 ---
 
-## Future Improvements
-- Add support for additional input devices (e.g., keyboard, game controllers).
-- Implement diagnostic logging for debugging hardware issues.
-- Optimize the use of multi-threading for better performance.
-
----
-
 ## Conclusion
 The JetCar project architecture is modular, scalable, and designed to provide precise control over a robotic car. By separating hardware interaction, control logic, and user input, the architecture ensures a clean and maintainable codebase.
 
@@ -251,14 +244,6 @@ O projeto segue uma arquitetura em camadas:
         +------------------------------>----------------------------->
                              Fluxo do Sistema
 ```
-
----
-
-## Melhorias Futuras
-
-- Adicionar suporte para dispositivos de entrada adicionais (e.g., teclado, controles de jogos).
-- Implementar registro de diagnósticos para depuração de problemas de hardware.
-- Otimizar o uso de múltiplas threads para melhor desempenho.
 
 ---
 
