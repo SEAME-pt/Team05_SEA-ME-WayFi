@@ -1,7 +1,7 @@
-# JetCar Project Architecture
+# Engine Codes Architecture
 
 ## Overview
-The JetCar project architecture consists of several components that work together to control a robotic car using servos, DC motors, and a joystick. The primary focus of the architecture is to manage hardware interfaces via the I2C protocol, handle joystick inputs using SDL2, and provide a responsive control mechanism.
+The Engine Codes architecture consists of several components that work together to control a robotic car using servos, DC motors, and a joystick. The primary focus of the architecture is to manage hardware interfaces via the I2C protocol, handle joystick inputs using SDL2, and provide a responsive control mechanism.
 
 ---
 
