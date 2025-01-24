@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "../include/temperature.h"
 
-class TemperatureTest : public testing::Test {
+class TemperatureT : public testing::Test {
 protected:
     Temperature* temp;
     void SetUp() override {  // new before each test
@@ -14,3 +14,8 @@ protected:
     }
 };
 
+//testing sections
+// TEST_F(TemperatureT, ) {
+//     temp->set_temperature(50);
+    
+// }

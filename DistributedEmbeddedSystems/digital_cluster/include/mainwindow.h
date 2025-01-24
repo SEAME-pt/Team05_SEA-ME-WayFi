@@ -29,16 +29,18 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QMqttClient* get_client();
+
 
 private slots:
-    void onMqttConnected();
-    void onMessageReceived(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
+    void connected();
+    void message_received(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
     void init_mqtt();
 
 private:
     Speed *left_dial = nullptr;
     Battery *right_dial = nullptr;
-    QMqttClient *mqttClient;
+    QMqttClient *client;
     Temperature *temp;
     Autonomy *autonomy;
 

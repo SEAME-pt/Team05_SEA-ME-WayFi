@@ -20,6 +20,4 @@ ssh jetracer@10.21.221.67 "rm -f /home/jetracer/qt_cluster/build/digital_cluster
 
 # Step 5: Copy the new executable to the Raspberry
 echo "Copying new executable to Raspberry"
-scp .env jetracer@10.21.221.67:/home/jetracer/qt_cluster/
 scp ./digital_cluster jetracer@10.21.221.67:/home/jetracer/qt_cluster/build
-scp ./charging-station.png jetracer@10.21.221.67:/home/jetracer/qt_cluster

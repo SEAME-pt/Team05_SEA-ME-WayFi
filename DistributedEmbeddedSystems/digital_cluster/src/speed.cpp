@@ -11,10 +11,11 @@
 #include <QDebug>
 
 Speed::Speed(QWidget *parent)
-    : QWidget(parent), max(11), current_angle(0), target_angle(0), current(0)
+    : QWidget(parent), max(10), current_angle(0), target_angle(0), current(0)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
-    setFixedSize(400, 470);
+    setMinimumSize(parent->width() * 0.5, parent->height() * 0.7); 
+    setMaximumSize(parent->width() * 0.5, parent->height() * 0.7);
     QString path = QCoreApplication::applicationDirPath();
     QString digital_path = QDir(path).filePath("../fonts_icon/digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
     digital_path = QDir::cleanPath(digital_path);
@@ -25,27 +26,24 @@ Speed::Speed(QWidget *parent)
     is_animating = false;
 }
 
-Speed::~Speed() {
-    QFontDatabase::removeApplicationFont(font_id);
-    QFontDatabase::removeApplicationFont(font_id2);
-    std::cout << "Remove Speed" << std::endl;
-}
-
 //fading
 void Speed::paintEvent(QPaintEvent *event) {
     QPainter painter(this); 
     painter.setRenderHint(QPainter::Antialiasing);
-    int radius = qMin(width(), height()) / 2 - 10; 
+    int radius = qMin(width(), height()) / 2.5; 
+    int centerX = width() / 2;
+    int centerY = height() / 2;
     int segments = 400; 
     float segment_angle = 270.0f / segments; 
     for (int i = 0; i < segments; ++i) {
         float t = static_cast<float>(i) / (segments);
         int alpha = static_cast<int>(120 * (1 - std::abs(2 * t - 1))); 
         QColor color(0, 40, 60, alpha); 
-        QPen pen(color, 20);
+        QPen pen(color, std::max(1, width() / 20));
         painter.setPen(pen);
         float overlap = 1.1f; 
-        painter.drawArc(10, 10, radius * 2, radius * 2, (270 - i * segment_angle) * 16, -segment_angle * 16 * overlap);
+        painter.drawArc(centerX - radius, centerY - radius, radius * 2, radius * 2, 
+            (270 - i * segment_angle) * 16, -segment_angle * 16 * overlap);
     }
 
     QColor start_color(0, 70, 90);  
@@ -60,29 +58,31 @@ void Speed::paintEvent(QPaintEvent *event) {
         );
         int alpha = static_cast<int>(255 * (1 - std::abs(2 * t - 1)));
         color.setAlpha(alpha);
-        QPen pen(color, 20);
+        QPen pen(color, std::max(1, width() / 20));
         painter.setPen(pen);
-        painter.drawArc(10, 10, radius * 2, radius * 2, (270 - i * segment_angle) * 16, -segment_angle * 16);
+        painter.drawArc(centerX - radius, centerY - radius, radius * 2, radius * 2, (270 - i * segment_angle) * 16, -segment_angle * 16);
     }
     paint_text(painter);
 }
 
 void Speed::paint_text(QPainter &painter) {
     painter.setPen(QPen(Qt::cyan));
-    painter.setFont(QFont("Digital-7", width() / 4, QFont::Bold));
-    QRect textRect = rect();
-    textRect.translate(0, -20); 
-    painter.drawText(textRect, Qt::AlignCenter, QString::number(current));
+    painter.setFont(QFont("Digital-7", width() / 5, QFont::Bold));
+    QRect currentTextRect = painter.boundingRect(rect(), Qt::AlignCenter, QString::number(current));
+    painter.drawText(currentTextRect, Qt::AlignCenter, QString::number(current));
     painter.setPen(QPen(Qt::darkCyan));
-    painter.setFont(QFont("Calculator", width() / 18));
-    painter.drawText(rect(), Qt::AlignBottom | Qt::AlignCenter, "km/h");
+    painter.setFont(QFont("Calculator", width() / 15));
+    QRect kmhRect = painter.boundingRect(rect(), Qt::AlignCenter, "km/h");
+    int yPosition = currentTextRect.bottom() + kmhRect.height(); 
+    int xPosition = (width() - kmhRect.width()) / 2;
+    painter.drawText(QPoint(xPosition, yPosition ), "km/h");
 }
 
 void Speed::set_current(float n) {
     current = n * 3.6;
     float new_target = (current * 270.0f) / max;
     new_target = std::min(new_target, 270.0f);
-    if (std::abs(new_target - target_angle) > 2.0f) {  
+    if (std::abs(new_target - target_angle) > 1.0f) {  
         target_angle = new_target;
         if (is_animating == false)
             animation();
@@ -93,20 +93,19 @@ void Speed::animation() {
     is_animating = true;
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this, timer]() {
+        float step = std::max(1.0f, std::abs(target_angle - current_angle) / 20.0f); // Adjust step dynamically
         if (current_angle < target_angle) {
-            current_angle += 5.0f; 
-            if (current_angle > target_angle) current_angle = target_angle;
+            current_angle = std::min(current_angle + step, target_angle);
         } else if (current_angle > target_angle) {
-            current_angle -= 5.0f;
-            if (current_angle < target_angle) current_angle = target_angle;
+            current_angle = std::max(current_angle - step, target_angle);
         } else {
             timer->stop();
             timer->deleteLater();
             is_animating = false;
         }
-        update();
+        update(); 
     });
-    timer->start(1);
+    timer->start(16); 
 }
 
 bool Speed::get_is_animating() {
@@ -127,4 +126,10 @@ float Speed::get_target_angle() {
 
 int Speed::get_max() {
     return max;
+}
+
+Speed::~Speed() {
+    QFontDatabase::removeApplicationFont(font_id);
+    QFontDatabase::removeApplicationFont(font_id2);
+    std::cout << "Remove Speed" << std::endl;
 }

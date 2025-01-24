@@ -15,6 +15,7 @@ public:
     ~Temperature();
     void set_temperature(int i);
     void set_text(int temp);
+    int get_temperature();
 
 private:
     int nb_sections;
