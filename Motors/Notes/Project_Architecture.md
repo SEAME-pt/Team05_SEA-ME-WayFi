@@ -1,7 +1,7 @@
-# Engine codes - Architecture
+# JetCar Project Architecture
 
 ## Overview
-The Engine codes architecture consists of several components that work together to control a robotic car using servos, DC motors, and a joystick. The primary focus of the architecture is to manage hardware interfaces via the I2C protocol, handle joystick inputs using SDL2, and provide a responsive control mechanism.
+The JetCar project architecture consists of several components that work together to control a robotic car using servos, DC motors, and a joystick. The primary focus of the architecture is to manage hardware interfaces via the I2C protocol, handle joystick inputs using SDL2, and provide a responsive control mechanism.
 
 ---
 
@@ -108,6 +108,13 @@ The project follows a layered architecture:
 
 ---
 
+## Future Improvements
+- Add support for additional input devices (e.g., keyboard, game controllers).
+- Implement diagnostic logging for debugging hardware issues.
+- Optimize the use of multi-threading for better performance.
+
+---
+
 ## Conclusion
 The JetCar project architecture is modular, scalable, and designed to provide precise control over a robotic car. By separating hardware interaction, control logic, and user input, the architecture ensures a clean and maintainable codebase.
 
@@ -115,11 +122,11 @@ The JetCar project architecture is modular, scalable, and designed to provide pr
 ---
 
 
-# Códigos dos Motores - Arquitetura
+# Arquitetura do Projeto JetCar
 
 ## Visão Geral
 
-A arquitetura do Códigos dos Motores consiste em diversos componentes que trabalham juntos para controlar um carro robótico usando servos, motores DC e um joystick. O principal foco da arquitetura é gerenciar interfaces de hardware via o protocolo I2C, lidar com entradas do joystick usando SDL2 e fornecer um mecanismo de controle responsivo.
+A arquitetura do projeto JetCar consiste em diversos componentes que trabalham juntos para controlar um carro robótico usando servos, motores DC e um joystick. O principal foco da arquitetura é gerenciar interfaces de hardware via o protocolo I2C, lidar com entradas do joystick usando SDL2 e fornecer um mecanismo de controle responsivo.
 
 ---
 
@@ -244,6 +251,14 @@ O projeto segue uma arquitetura em camadas:
         +------------------------------>----------------------------->
                              Fluxo do Sistema
 ```
+
+---
+
+## Melhorias Futuras
+
+- Adicionar suporte para dispositivos de entrada adicionais (e.g., teclado, controles de jogos).
+- Implementar registro de diagnósticos para depuração de problemas de hardware.
+- Otimizar o uso de múltiplas threads para melhor desempenho.
 
 ---
 

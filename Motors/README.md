@@ -1,8 +1,8 @@
-# Engine codes
+# JetCar Project
 
 ## Overview
 
-The **Engine Codes** is a C++ library designed to control a robotic car using servo motors, DC motors, and a joystick. The project integrates various hardware components via the I2C protocol and utilizes SDL2 for joystick support.
+The **JetCar** project is a C++ library designed to control a robotic car using servo motors, DC motors, and a joystick. The project integrates various hardware components via the I2C protocol and utilizes SDL2 for joystick support.
 
 Key features include:
 - Servo motor control for steering.
@@ -153,11 +153,11 @@ int main() {
 
 ---
 
-# Codigos do Motores
+# Projeto JetCar
 
 ## Visão Geral
 
-O **Codigos do Motores** é uma biblioteca em C++ concebida para controlar um carro robótico utilizando servomotores, motores DC e um joystick. O projeto integra diversos componentes de hardware via o protocolo I2C e utiliza a biblioteca SDL2 para suporte ao joystick.
+O projeto **JetCar** é uma biblioteca em C++ concebida para controlar um carro robótico utilizando servomotores, motores DC e um joystick. O projeto integra diversos componentes de hardware via o protocolo I2C e utiliza a biblioteca SDL2 para suporte ao joystick.
 
 Principais funcionalidades incluem:
 - Controlo de servomotor para direcção.
