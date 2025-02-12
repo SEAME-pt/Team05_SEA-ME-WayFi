@@ -2,15 +2,18 @@
 #include <QApplication>
 #include <QDebug>
 #include "../include/battery.h"
+#include "../include/mainwindow.h"
+#include <memory>
 
 class BatteryT : public testing::Test {
 protected:
     Battery* battery;
     MockQPainter painter;
-    void SetUp() override {  // new before each test
-        battery = new Battery();
+    MainWindow *mw;
+    void SetUp() override {
+        battery = mw->get_battery();
     }
-    void TearDown() override { //delete after each test
+    void TearDown() override {
         delete battery;
     }
 };
@@ -20,8 +23,8 @@ TEST_F(BatteryT, TestBatteryState) {
     std::cout << "Testing BatteryState, current = " << battery->get_current() << std::endl;
     EXPECT_EQ(battery->get_current(), 50); 
 
-    // EXPECT_CALL(painter, drawText(testing::_, testing::_, testing::_)).Times(testing::AtLeast(1));
-    // EXPECT_CALL(painter, drawPixmap(testing::_, testing::_)).Times(testing::AtLeast(1));
+    EXPECT_CALL(painter, drawText(testing::_, testing::_, testing::_)).Times(testing::AtLeast(1));
+    EXPECT_CALL(painter, drawPixmap(testing::_, testing::_)).Times(testing::AtLeast(1));
 }
 
 int main(int argc, char **argv) {

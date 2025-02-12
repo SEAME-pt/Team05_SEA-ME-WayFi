@@ -30,6 +30,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QMqttClient* get_client();
+    Battery *get_battery();
 
 
 private slots:

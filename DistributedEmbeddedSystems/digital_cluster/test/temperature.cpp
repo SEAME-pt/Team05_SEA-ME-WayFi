@@ -17,5 +17,5 @@ protected:
 //testing sections
 // TEST_F(TemperatureT, ) {
 //     temp->set_temperature(50);
-    
+//     // EXPECT_EQ(50, temp->)
 // }

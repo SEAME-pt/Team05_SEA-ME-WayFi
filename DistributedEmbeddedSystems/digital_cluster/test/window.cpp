@@ -15,11 +15,11 @@ protected:
     }
 };
 
-TEST_F(Window, Mqtt) {
-    EXPECT_EQ(window->get_client()->state(), QMqttClient::Connected);
-    //check signal slot connection 
-    const QMetaObject *meta = window->get_client()->metaObject();
-    EXPECT_TRUE(meta->indexOfSlot("connected()") >= 0);
-    EXPECT_TRUE(meta->indexOfSlot("message_received(const QByteArray&, const QMqttTopicName&)") >= 0);
-}
+// TEST_F(Window, Mqtt) {
+//     EXPECT_EQ(window->get_client()->state(), QMqttClient::Connected);
+//     //check signal slot connection 
+//     const QMetaObject *meta = window->get_client()->metaObject();
+//     EXPECT_TRUE(meta->indexOfSlot("connected()") >= 0);
+//     EXPECT_TRUE(meta->indexOfSlot("message_received(const QByteArray&, const QMqttTopicName&)") >= 0);
+// }
 

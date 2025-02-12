@@ -4,7 +4,6 @@
 #include <QCoreApplication>
 #include <QFontDatabase>
 #include <unistd.h>
-#include <QProcessEnvironment>
 
 //adding layouts and widgets to main window
 MainWindow::MainWindow(QWidget *parent)
@@ -15,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     left_dial = new Speed(this);
     right_dial = new Battery(this);
     QHBoxLayout* layout = new QHBoxLayout(); 
-    layout->addWidget(left_dial, 0, Qt::AlignLeft | Qt::AlignCenter);
-    layout->addWidget(right_dial, 0, Qt::AlignRight | Qt::AlignCenter);
+    layout->addWidget(left_dial, 0,  Qt::AlignCenter); //Qt::AlignLeft |
+    layout->addWidget(right_dial, 0, Qt::AlignCenter); //Qt::AlignRight |
     QVBoxLayout* mainlayout = new QVBoxLayout();
     mainlayout->addLayout(layout, 1);
 
@@ -42,14 +41,14 @@ MainWindow::~MainWindow()
 //connecting to mqtt via cloud or localhost or to jetracer via network
 void MainWindow::init_mqtt()
 {
-    // client->setHostname("972e24210b544ba49bfb9c1d3164d02b.s1.eu.hivemq.cloud"); //cloud
-    // client->setPort(8883);
-    // QString user = qgetenv("user");
-    // client->setUsername(user); 
-    // QString pass = qgetenv("password");
-    // client->setPassword(pass); 
-    client->setHostname("10.21.221.67"); //when on the same network
-    client->setPort(1883); //cross compiling
+    client->setHostname("972e24210b544ba49bfb9c1d3164d02b.s1.eu.hivemq.cloud"); //cloud
+    client->setPort(8883);
+    QString user = qgetenv("user");
+    client->setUsername(user); 
+    QString pass = qgetenv("password");
+    client->setPassword(pass); 
+    // client->setHostname("10.21.221.67"); //when on the same network
+    // client->setPort(1883); //cross compiling
     //client->setHostname("127.0.0.1"); //when cross-compiling with jetracer
 
     connect(client, &QMqttClient::connected, this, &MainWindow::connected);
@@ -57,7 +56,7 @@ void MainWindow::init_mqtt()
     connect(client, &QMqttClient::errorChanged, this, [](QMqttClient::ClientError error) {
         qDebug() << "MQTT Client error:" << error;
     });
-    client->connectToHost(); //for cloud needs to be encrypted, for jetracer network or localhost its not encrypted
+    client->connectToHostEncrypted(); //for cloud needs to be encrypted, for jetracer network or localhost its not encrypted
 }
 
 //subscribing to topic of mqtt
@@ -116,3 +115,6 @@ QMqttClient* MainWindow::get_client()
     return client;
 }
 
+Battery *MainWindow::get_battery() {
+    return right_dial;
+}

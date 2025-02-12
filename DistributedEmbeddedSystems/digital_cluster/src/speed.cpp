@@ -14,8 +14,10 @@ Speed::Speed(QWidget *parent)
     : QWidget(parent), max(10), current_angle(0), target_angle(0), current(0)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
-    setMinimumSize(parent->width() * 0.5, parent->height() * 0.7); 
-    setMaximumSize(parent->width() * 0.5, parent->height() * 0.7);
+    if (parent) {
+        setMinimumSize(parent->width() * 0.5, parent->height() * 0.7); 
+        setMaximumSize(parent->width() * 0.5, parent->height() * 0.7);
+    }
     QString path = QCoreApplication::applicationDirPath();
     QString digital_path = QDir(path).filePath("../fonts_icon/digital-7.ttf"); //change this dir, take out the ../ when sending to jetson
     digital_path = QDir::cleanPath(digital_path);

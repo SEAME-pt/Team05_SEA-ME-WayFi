@@ -10,9 +10,12 @@ Battery::Battery(QWidget *parent)
     : QWidget(parent), current(20), max(100)
 {
     setStyleSheet("background-color: rgb(2, 1, 30);");
-    setMinimumSize(parent->width() * 0.5, parent->height() * 0.7); 
-    setMaximumSize(parent->width() * 0.5, parent->height() * 0.7);
-}
+    if (parent) {
+
+        setMinimumSize(parent->width() * 0.5, parent->height() * 0.7); 
+        setMaximumSize(parent->width() * 0.5, parent->height() * 0.7);
+    }
+    }
 
 Battery::~Battery()
 {

@@ -3,8 +3,10 @@
 Autonomy::Autonomy(QWidget *parent)
     : QWidget{parent}
 {
-    setMinimumSize(parent->width() * 0.3, parent->height() * 0.2); 
-    setMaximumSize(parent->width() * 0.3, parent->height() * 0.2);
+    if (parent) {
+        setMinimumSize(parent->width() * 0.3, parent->height() * 0.2); 
+        setMaximumSize(parent->width() * 0.3, parent->height() * 0.2);
+    }
     main_layout = new QVBoxLayout(this);
     main_layout->setSpacing(height() * 0.05);
     layout = new QHBoxLayout();

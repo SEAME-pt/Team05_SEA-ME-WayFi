@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
-project(digital_cluster VERSION 0.1 LANGUAGES CXX)
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)   # If using .ui files
+project(digital_cluster VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -g")
-# set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
+# set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -fsanitize=address") 
+
 include_directories(include)
 file(GLOB SOURCES src/*.cpp)
 file(GLOB HEADERS include/*.h)
@@ -16,6 +16,20 @@ set(CMAKE_COLOR_MAKEFILE ON)
 find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets Mqtt Test)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Mqtt)
 include_directories(${CMAKE_SOURCE_DIR})
+
+option(USE_SANITIZER "Enable sanitizer" OFF)
+
+if(USE_SANITIZER)
+  set(SANITIZER_COMPILE_FLAGS -fsanitize=address -fno-omit-frame-pointer)
+  set(SANITIZER_LINK_FLAGS -fsanitize=address)
+  # set(SANITIZER_FLAGS -fsanitize=thread) # Uncomment this line if you want ThreadSanitizer instead:
+#   find_library(ASAN_LIBRARY asan)
+#   if(ASAN_LIBRARY)
+#     list(APPEND SANITIZER_LINK_FLAGS ${ASAN_LIBRARY})
+#   endif()
+endif()
+
+
 if(BUILD_TESTS)
     add_compile_definitions(BUILD_TESTS)
     include(FetchContent)
@@ -24,15 +38,13 @@ if(BUILD_TESTS)
       URL https://github.com/google/googletest/archive/release-1.12.1.zip
     )
     FetchContent_MakeAvailable(googletest)
-    include_directories(
-        ${gtest_SOURCE_DIR}/include
-        ${gmock_SOURCE_DIR}/include
-    )
+
     file(GLOB TESTS test/*.cpp)
     add_executable(digital_cluster_test
         ${SOURCES}
         ${HEADERS}
         ${TESTS}
+        ${MOC_SOURCES}
     )
     target_link_libraries(digital_cluster_test
         gmock
@@ -40,11 +52,19 @@ if(BUILD_TESTS)
         gtest_main
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Mqtt
+        ${CMAKE_CXX_LINKER_FLAGS} 
+        # ${ASAN_LIBRARY} 
     )
     target_include_directories(digital_cluster_test PUBLIC
         ${gtest_SOURCE_DIR}/include
         ${gmock_SOURCE_DIR}/include
     )
+
+    if(USE_SANITIZER)
+        target_compile_options(digital_cluster_test PRIVATE ${SANITIZER_COMPILE_FLAGS})
+        target_link_options(digital_cluster_test PRIVATE ${SANITIZER_LINK_FLAGS})
+    endif()
+
     enable_testing()
     add_test(NAME DigitalClusterTest COMMAND digital_cluster_test)
     
@@ -73,7 +93,11 @@ if(BUILD_TESTS)
             target_link_libraries(digital_cluster
                 Qt${QT_VERSION_MAJOR}::Widgets
                 Qt${QT_VERSION_MAJOR}::Mqtt
-        )
+            )
+            if(USE_SANITIZER)
+                target_compile_options(digital_cluster PRIVATE ${SANITIZER_COMPILE_FLAGS})
+                target_link_options(digital_cluster PRIVATE ${SANITIZER_FLAGS})
+            endif()
     
         if(QT_VERSION_MAJOR EQUAL 6)
             qt_finalize_executable(digital_cluster)
