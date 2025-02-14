@@ -25,10 +25,14 @@ protected:
 
 TEST_F(BatteryT, TestBatteryState) {
     EXPECT_CALL(*painter, begin(testing::_)).WillOnce(testing::Return(true));
+    EXPECT_CALL(*painter, end()).WillOnce(testing::Return(true));
     EXPECT_CALL(*painter, drawText(testing::_, testing::_, testing::_)).Times(testing::AtLeast(2));
     EXPECT_CALL(*painter, drawArc(testing::_, testing::_, testing::_, testing::_, testing::_, testing::_)).Times(testing::AtLeast(2));
     EXPECT_CALL(*painter, drawPixmap(testing::_, testing::_)).Times(testing::AtLeast(1));
     EXPECT_CALL(*painter, setPen(testing::_)).Times(testing::AtLeast(4));
+    EXPECT_CALL(*painter, setFont(testing::_)).Times(testing::AtLeast(2));
+    EXPECT_CALL(*painter, boundingRect(testing::_,testing::_, testing::_)).Times(testing::AtLeast(1));
+    EXPECT_CALL(*painter, setRenderHint(testing::_, testing::_)).Times(testing::AtLeast(1));
     
     battery->setTestPainter(painter);
     battery->set_current(50);

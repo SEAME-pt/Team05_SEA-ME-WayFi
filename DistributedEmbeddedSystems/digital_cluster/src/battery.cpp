@@ -31,25 +31,24 @@ int Battery::get_current()
     return current;
 }
 
-//fading
 void Battery::paintEvent(QPaintEvent *event)
 {
-    PainterInterface* activePainter = test_painter;
-    QPainter localPainter(this);
-    if (!activePainter) {
-        activePainter = new QPainterWrapper(&localPainter);
+    TestPainter* painter = test_painter;
+    QPainter real_painter(this);
+    if (!painter) {
+        painter = new QPainterCaller(&real_painter);
     }
     if (test_painter) {
-        activePainter->begin(this);
-        std::cout << "Using active painter (test mode)" << std::endl;
+        painter->begin(this);
     }
-    activePainter->setRenderHint(QPainter::Antialiasing, true);
-    draw_arcs(activePainter);
-    draw_pixmap(activePainter);
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    draw_arcs(painter);
+    draw_pixmap(painter);
 }
 
 
-void Battery::draw_arcs(PainterInterface *activePainter)
+//fading arcs
+void Battery::draw_arcs(TestPainter *painter)
 {
     int radius = qMin(width(), height()) / 2.5;  
     int segments = 300; 
@@ -61,9 +60,9 @@ void Battery::draw_arcs(PainterInterface *activePainter)
         int alpha = static_cast<int>(120 * (1 - std::abs(2 * t - 1))); 
         QColor color(0, 52, 50, alpha); 
         QPen pen(color, width() / 20);
-        activePainter->setPen(pen);
+        painter->setPen(pen);
         float overlap = 1.1f; 
-        activePainter->drawArc(centerX - radius, centerY - radius, radius * 2, radius * 2, (180 - i * segment_angle) * 16, -segment_angle * 16 * overlap);
+        painter->drawArc(centerX - radius, centerY - radius, radius * 2, radius * 2, (180 - i * segment_angle) * 16, -segment_angle * 16 * overlap);
     }
     float angle_progress = (static_cast<float>(current) * 270.0f) / max;
     segment_angle = angle_progress / segments;
@@ -84,19 +83,18 @@ void Battery::draw_arcs(PainterInterface *activePainter)
         int alpha = static_cast<int>(255 * (1 - std::abs(2 * t - 1)));
         color.setAlpha(alpha);
         QPen pen(color, width() / 20);
-        activePainter->setPen(pen);
-        activePainter->drawArc(centerX - radius, centerY - radius, radius * 2, radius * 2, (270 + i * segment_angle) * 16, segment_angle * 16);
+        painter->setPen(pen);
+        painter->drawArc(centerX - radius, centerY - radius, radius * 2, radius * 2, (270 + i * segment_angle) * 16, segment_angle * 16);
     }
 }
 
 
-void Battery::draw_pixmap(PainterInterface *activePainter)
+void Battery::draw_pixmap(TestPainter *painter)
 {
-    activePainter->setPen(QPen(QColor(0, 250, 195)));
-    activePainter->setFont(QFont("Digital-7", width() / 5, QFont::Bold));
-    QRect currentTextRect = activePainter->boundingRect(rect(), Qt::AlignCenter, QString::number(current));
-    activePainter->drawText(currentTextRect, Qt::AlignCenter, QString::number(current));
-    std::cout << "draw_text" << std::endl;
+    painter->setPen(QPen(QColor(0, 250, 195)));
+    painter->setFont(QFont("Digital-7", width() / 5, QFont::Bold));
+    QRect currentTextRect = painter->boundingRect(rect(), Qt::AlignCenter, QString::number(current));
+    painter->drawText(currentTextRect, Qt::AlignCenter, QString::number(current));
     
     QString path = QCoreApplication::applicationDirPath();
     QString digital_path = QDir(path).filePath("../fonts_icon/charging-station.png"); //change this dir, take out the ../ when sending to jetson
@@ -117,21 +115,20 @@ void Battery::draw_pixmap(PainterInterface *activePainter)
     QRect rectBottom = this->rect();
     int xIcon = (width() - pixmap.width()) / 2;  
     QRect bottomRect = QRect(xIcon, currentTextRect.bottom() + 10, pixmap.width(), pixmap.height());
-    activePainter->drawPixmap(bottomRect, pixmap);
-    std::cout << "draw_pixmap" << std::endl;
-    draw_text(activePainter, bottomRect);
+    painter->drawPixmap(bottomRect, pixmap);
+    draw_text(painter, bottomRect);
 }
 
 
-void Battery::draw_text(PainterInterface *activePainter, QRect bottomRect)
+void Battery::draw_text(TestPainter *painter, QRect bottomRect)
 {
     QFont font("Calculator", width() / 16);
-    activePainter->setFont(font);
-    activePainter->setPen(QPen(QColor(0, 120, 100)));
+    painter->setFont(font);
+    painter->setPen(QPen(QColor(0, 120, 100)));
     int yPos = bottomRect.bottom();  
     int xPos = bottomRect.right() + 5; 
     QRectF textRect(bottomRect.right() + 5, bottomRect.bottom() - 20, 30, 30);  // Adjust size as needed
     int flags = Qt::AlignLeft | Qt::AlignVCenter;  // Adjust alignment flags as needed
     QString text = "%";
-    activePainter->drawText(textRect, flags, text);
+    painter->drawText(textRect, flags, text);
 }
