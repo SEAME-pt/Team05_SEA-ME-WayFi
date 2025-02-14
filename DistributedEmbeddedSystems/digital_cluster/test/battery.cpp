@@ -1,30 +1,40 @@
 #include <gtest/gtest.h>
 #include <QApplication>
 #include <QDebug>
-#include "../include/battery.h"
+#include <QTest>
 #include "../include/mainwindow.h"
-#include <memory>
 
 class BatteryT : public testing::Test {
 protected:
-    Battery* battery;
-    MockQPainter painter;
     MainWindow *mw;
+    Battery* battery;
+    MockPainter *painter;
     void SetUp() override {
+        mw = new MainWindow();
+        mw->show();
+        painter = new MockPainter();
         battery = mw->get_battery();
     }
     void TearDown() override {
-        delete battery;
+        painter->end();
+        delete painter;
+        battery->setTestPainter(nullptr);
+        delete mw;
     }
 };
 
 TEST_F(BatteryT, TestBatteryState) {
+    EXPECT_CALL(*painter, begin(testing::_)).WillOnce(testing::Return(true));
+    EXPECT_CALL(*painter, drawText(testing::_, testing::_, testing::_)).Times(testing::AtLeast(2));
+    EXPECT_CALL(*painter, drawArc(testing::_, testing::_, testing::_, testing::_, testing::_, testing::_)).Times(testing::AtLeast(2));
+    EXPECT_CALL(*painter, drawPixmap(testing::_, testing::_)).Times(testing::AtLeast(1));
+    EXPECT_CALL(*painter, setPen(testing::_)).Times(testing::AtLeast(4));
+    
+    battery->setTestPainter(painter);
     battery->set_current(50);
-    std::cout << "Testing BatteryState, current = " << battery->get_current() << std::endl;
     EXPECT_EQ(battery->get_current(), 50); 
-
-    EXPECT_CALL(painter, drawText(testing::_, testing::_, testing::_)).Times(testing::AtLeast(1));
-    EXPECT_CALL(painter, drawPixmap(testing::_, testing::_)).Times(testing::AtLeast(1));
+    QApplication::processEvents();
+    QTest::qWait(100);
 }
 
 int main(int argc, char **argv) {

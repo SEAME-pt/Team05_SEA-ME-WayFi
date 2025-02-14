@@ -4,8 +4,6 @@ set(CMAKE_AUTOUIC ON)   # If using .ui files
 project(digital_cluster VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -g")
-# set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -fsanitize=address") 
 
 include_directories(include)
 file(GLOB SOURCES src/*.cpp)
@@ -14,7 +12,7 @@ option(BUILD_TESTS "Build test targets" OFF)
 
 set(CMAKE_COLOR_MAKEFILE ON)
 find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets Mqtt Test)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Mqtt)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Mqtt Test)
 include_directories(${CMAKE_SOURCE_DIR})
 
 option(USE_SANITIZER "Enable sanitizer" OFF)
@@ -23,28 +21,22 @@ if(USE_SANITIZER)
   set(SANITIZER_COMPILE_FLAGS -fsanitize=address -fno-omit-frame-pointer)
   set(SANITIZER_LINK_FLAGS -fsanitize=address)
   # set(SANITIZER_FLAGS -fsanitize=thread) # Uncomment this line if you want ThreadSanitizer instead:
-#   find_library(ASAN_LIBRARY asan)
-#   if(ASAN_LIBRARY)
-#     list(APPEND SANITIZER_LINK_FLAGS ${ASAN_LIBRARY})
-#   endif()
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+googletest
+URL https://github.com/google/googletest/archive/release-1.12.1.zip
+)
+FetchContent_MakeAvailable(googletest)
 
 if(BUILD_TESTS)
     add_compile_definitions(BUILD_TESTS)
-    include(FetchContent)
-    FetchContent_Declare(
-      googletest
-      URL https://github.com/google/googletest/archive/release-1.12.1.zip
-    )
-    FetchContent_MakeAvailable(googletest)
-
     file(GLOB TESTS test/*.cpp)
     add_executable(digital_cluster_test
         ${SOURCES}
         ${HEADERS}
         ${TESTS}
-        ${MOC_SOURCES}
     )
     target_link_libraries(digital_cluster_test
         gmock
@@ -53,7 +45,7 @@ if(BUILD_TESTS)
         Qt${QT_VERSION_MAJOR}::Widgets
         Qt${QT_VERSION_MAJOR}::Mqtt
         ${CMAKE_CXX_LINKER_FLAGS} 
-        # ${ASAN_LIBRARY} 
+        Qt5::Test
     )
     target_include_directories(digital_cluster_test PUBLIC
         ${gtest_SOURCE_DIR}/include
@@ -91,8 +83,12 @@ if(BUILD_TESTS)
                     endif()
             endif()
             target_link_libraries(digital_cluster
+                gmock
                 Qt${QT_VERSION_MAJOR}::Widgets
                 Qt${QT_VERSION_MAJOR}::Mqtt
+            )
+            target_include_directories(digital_cluster PUBLIC
+                ${gmock_SOURCE_DIR}/include
             )
             if(USE_SANITIZER)
                 target_compile_options(digital_cluster PRIVATE ${SANITIZER_COMPILE_FLAGS})
