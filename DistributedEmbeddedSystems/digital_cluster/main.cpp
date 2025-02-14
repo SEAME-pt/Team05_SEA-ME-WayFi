@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "./include/mainwindow.h"
 #include <QApplication>
 #include <QLocale>
 #include <QTimer>
@@ -7,8 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-    //QCoreApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
-    //QCoreApplication a(argc, argv);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     MainWindow w;
     w.setWindowState(Qt::WindowFullScreen);

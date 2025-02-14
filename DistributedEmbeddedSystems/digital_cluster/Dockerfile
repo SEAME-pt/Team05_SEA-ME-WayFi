@@ -32,8 +32,6 @@ RUN apt-get update && apt-get install -y \
     libicu-dev:arm64 libpng-dev:arm64 libjpeg-dev:arm64 \
     qtbase5-private-dev
 
-RUN echo "Checking qmake version" && qmake --version
-
 RUN git clone -b 5.15 https://code.qt.io/qt/qtmqtt.git /qtmqtt && \
     cd /qtmqtt && \
     qmake && \
@@ -49,12 +47,13 @@ WORKDIR /workspace
 
 #Copy local project files into the container
 COPY . /workspace
+COPY .env /workspace/.env
 
 #Build project
-RUN cd build && \
+RUN rm -rf build && mkdir -p build && cd build && \
     rm -rf CMakeCache.txt CMakeFiles/ && \
     cmake .. && \
-    make && \
+    make VERBOSE=1 && \
     chmod +x ./digital_cluster
 
-ENTRYPOINT ["./build/digital_cluster"]
+ENTRYPOINT ["./digital_cluster"]
