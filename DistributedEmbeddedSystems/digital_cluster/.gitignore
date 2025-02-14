@@ -1,3 +1,4 @@
-# Ignore the build directory
 build/
 digital_cluster
+.env
+.gitignore

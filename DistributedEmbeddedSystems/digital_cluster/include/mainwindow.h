@@ -3,12 +3,9 @@
 
 #include <QMainWindow>
 #include <cstdio>
-#include <QTimer>
-#include <QProcess>
 #include <cstdlib>
-#include <QThread>
-#include "customdial.h"
-#include "batterydial.h"
+#include "speed.h"
+#include "battery.h"
 #include <QVBoxLayout>
 #include <QtMqtt/QtMqtt>
 #include <QtMqtt/QMqttClient>
@@ -16,8 +13,8 @@
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt>
 #include <QApplication>
-#include "tempbar.h"
-#include "autonomybar.h"
+#include "temperature.h"
+#include "autonomy.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,18 +29,22 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QMqttClient* get_client();
+    Battery *get_battery();
+    Autonomy *get_autonomy();
+    Temperature *get_temperature();
 
 private slots:
-    void onMqttConnected();
-    void onMessageReceived(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
+    void connected();
+    void message_received(const QByteArray &message, const QMqttTopicName &topic); // Declaração para receber mensagens
     void init_mqtt();
 
 private:
-    CustomDial *left_dial = nullptr;
-    BatteryDial *right_dial = nullptr;
-    QMqttClient *mqttClient;
-    TempBar *temp;
-    AutonomyBar *autonomy;
+    Speed *left_dial = nullptr;
+    Battery *right_dial = nullptr;
+    QMqttClient *client;
+    Temperature *temp;
+    Autonomy *autonomy;
 
 };
 #endif // MAINWINDOW_H
