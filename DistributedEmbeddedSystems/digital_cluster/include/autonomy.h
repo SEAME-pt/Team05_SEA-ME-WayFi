@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QDir>
+#include <iostream>
 #include <QCoreApplication>
 
 class Autonomy : public QWidget
@@ -15,6 +16,12 @@ public:
     Autonomy(QWidget *parent = nullptr);
     ~Autonomy();
     void set_autonomy(int i);
+    int get_nbsections();
+    QVector<QWidget*> get_sections();
+    QHBoxLayout* get_layout();
+    QVBoxLayout* get_mainlayout();
+    QLabel *get_label();
+
 
 private:
     int nb_sections;

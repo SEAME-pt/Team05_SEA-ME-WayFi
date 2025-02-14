@@ -1,21 +1,23 @@
 #include <gtest/gtest.h>
-#include <QApplication>
 #include <QDebug>
 #include <QTest>
 #include "../include/mainwindow.h"
 
-class BatteryT : public testing::Test {
+class BatteryT : public testing::Test
+{
 protected:
     MainWindow *mw;
     Battery* battery;
-    MockPainter *painter;
-    void SetUp() override {
+    MockPainter* painter;
+    void SetUp() override
+    {
         mw = new MainWindow();
         mw->show();
         painter = new MockPainter();
         battery = mw->get_battery();
     }
-    void TearDown() override {
+    void TearDown() override
+    {
         painter->end();
         delete painter;
         battery->setTestPainter(nullptr);
@@ -23,7 +25,8 @@ protected:
     }
 };
 
-TEST_F(BatteryT, TestBatteryState) {
+TEST_F(BatteryT, TestBatteryState)
+{
     EXPECT_CALL(*painter, begin(testing::_)).WillOnce(testing::Return(true));
     EXPECT_CALL(*painter, end()).WillOnce(testing::Return(true));
     EXPECT_CALL(*painter, drawText(testing::_, testing::_, testing::_)).Times(testing::AtLeast(2));

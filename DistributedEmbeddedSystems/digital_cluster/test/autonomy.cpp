@@ -1,16 +1,30 @@
 #include <gtest/gtest.h>
-#include <QApplication>
 #include <QDebug>
-#include "../include/autonomy.h"
+#include "../include/mainwindow.h"
 
-class AutonomyTest : public testing::Test {
+class AutonomyT : public testing::Test
+{
 protected:
-    Autonomy* bar;
-    void SetUp() override {  // new before each test
-        bar = new Autonomy();
+    MainWindow* mw;
+    Autonomy* autonomy;
+    void SetUp() override
+    {
+        mw = new MainWindow();
+        mw->show();
+        autonomy = mw->get_autonomy();
     }
-    void TearDown() override { //delete after each test
-        delete bar;
+    void TearDown() override
+    {
+        delete mw;
     }
 };
 
+TEST_F(AutonomyT, TestVar)
+{
+    // autonomy->set_autonomy(7);
+    EXPECT_EQ(autonomy->get_nbsections(), 8);
+    EXPECT_EQ(autonomy->get_sections().size(), 8);
+    EXPECT_TRUE(autonomy->get_layout() != nullptr);
+    EXPECT_TRUE(autonomy->get_mainlayout() != nullptr);
+    EXPECT_TRUE(autonomy->get_label() != nullptr);
+}

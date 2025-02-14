@@ -1,5 +1,6 @@
 #include "../include/autonomy.h"
 
+//constructor
 Autonomy::Autonomy(QWidget *parent)
     : QWidget{parent}
 {
@@ -22,13 +23,18 @@ Autonomy::Autonomy(QWidget *parent)
     main_layout->addLayout(layout);
     label = new QLabel(this);
     set_autonomy(8);
+    std::cout << "autonomy constructor\n";
 }
 
-Autonomy::~Autonomy() {
+//destructor
+Autonomy::~Autonomy()
+{
     delete layout;
 }
 
-void Autonomy::set_autonomy(int aut) {
+//setter
+void Autonomy::set_autonomy(int aut)
+{
     int sections_color = static_cast<int>((aut / 10.0) * nb_sections);
     for (int i = nb_sections -1; i >= 0; i--) {
         if (i >= nb_sections - sections_color) {
@@ -57,4 +63,30 @@ void Autonomy::set_autonomy(int aut) {
     label->setAlignment(Qt::AlignTop | Qt::AlignRight);
     label->setContentsMargins(0, 0, 10, 0);
     main_layout->addWidget(label);
+}
+
+// getters
+int Autonomy::get_nbsections()
+{
+    return nb_sections;
+}
+
+QVector<QWidget*> Autonomy::get_sections()
+{
+    return sections;
+}
+
+QHBoxLayout* Autonomy::get_layout()
+{
+    return layout;
+}
+
+QVBoxLayout* Autonomy::get_mainlayout()
+{
+    return main_layout;
+}
+
+QLabel* Autonomy::get_label()
+{
+    return label;
 }

@@ -15,7 +15,11 @@ public:
     ~Temperature();
     void set_temperature(int i);
     void set_text(int temp);
-    int get_temperature();
+    int get_nbsections();
+    QVector<QWidget*> get_sections();
+    QHBoxLayout* get_layout();
+    QVBoxLayout* get_mainlayout();
+    QLabel *get_label();
 
 private:
     int nb_sections;

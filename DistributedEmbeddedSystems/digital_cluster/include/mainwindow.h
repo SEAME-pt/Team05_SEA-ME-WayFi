@@ -31,7 +31,8 @@ public:
     ~MainWindow();
     QMqttClient* get_client();
     Battery *get_battery();
-
+    Autonomy *get_autonomy();
+    Temperature *get_temperature();
 
 private slots:
     void connected();

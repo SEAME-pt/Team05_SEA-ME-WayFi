@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     centralWidget->setLayout(mainlayout);
     setCentralWidget(centralWidget);
     init_mqtt();
+    std::cout << "mainwindow constructor\n";
 }
 
 //close main window at destruction
@@ -39,7 +40,7 @@ MainWindow::~MainWindow()
 }
 
 //connecting to mqtt via cloud or localhost or to jetracer via network
-void MainWindow::init_mqtt()
+void    MainWindow::init_mqtt()
 {
     client->setHostname("972e24210b544ba49bfb9c1d3164d02b.s1.eu.hivemq.cloud"); //cloud
     client->setPort(8883);
@@ -60,7 +61,7 @@ void MainWindow::init_mqtt()
 }
 
 //subscribing to topic of mqtt
-void MainWindow::connected()
+void    MainWindow::connected()
 {
     QMqttTopicFilter topic("jetracer/speed");
     auto subscription = client->subscribe(topic);
@@ -78,7 +79,7 @@ void MainWindow::connected()
 }
 
 //receiving message and updating current
-void MainWindow::message_received(const QByteArray &message, const QMqttTopicName &topic)
+void    MainWindow::message_received(const QByteArray &message, const QMqttTopicName &topic)
 {
     qDebug() << "Message received on topic" << topic.name() << ":" << message;
     bool ok;
@@ -110,11 +111,23 @@ void MainWindow::message_received(const QByteArray &message, const QMqttTopicNam
     }
 }
 
-QMqttClient* MainWindow::get_client()
+QMqttClient*    MainWindow::get_client()
 {
     return client;
 }
 
-Battery *MainWindow::get_battery() {
+Battery*    MainWindow::get_battery()
+{
     return right_dial;
+}
+
+Autonomy*   MainWindow::get_autonomy()
+{
+    std::cout << "getting autonomy\n";
+    return autonomy;
+}
+
+Temperature*   MainWindow::get_temperature()
+{
+    return temp;
 }

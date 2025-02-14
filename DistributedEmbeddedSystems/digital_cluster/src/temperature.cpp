@@ -63,3 +63,28 @@ void Temperature::set_temperature(int temp)
     }
     set_text(temp);
 }
+
+int Temperature::get_nbsections()
+{
+    return nb_sections;
+}
+
+QVector<QWidget*> Temperature::get_sections()
+{
+    return sections;
+}
+
+QHBoxLayout* Temperature::get_layout()
+{
+    return layout;
+}
+
+QVBoxLayout* Temperature::get_mainlayout()
+{
+    return main_layout;
+}
+
+QLabel* Temperature::get_label()
+{
+    return label;
+}

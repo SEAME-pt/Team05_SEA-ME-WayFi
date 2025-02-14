@@ -1,21 +1,30 @@
 #include <gtest/gtest.h>
-#include <QApplication>
 #include <QDebug>
-#include "../include/temperature.h"
+#include "../include/mainwindow.h"
 
-class TemperatureT : public testing::Test {
+class TemperatureT : public testing::Test
+{
 protected:
-    Temperature* temp;
-    void SetUp() override {  // new before each test
-        temp = new Temperature();
+    MainWindow* mw;
+    Temperature* temperature;
+    void SetUp() override
+    {
+        mw = new MainWindow();
+        mw->show();
+        temperature = mw->get_temperature();
     }
-    void TearDown() override { //delete after each test
-        delete temp;
+    void TearDown() override
+    {
+        delete mw;
     }
 };
 
-//testing sections
-// TEST_F(TemperatureT, ) {
-//     temp->set_temperature(50);
-//     // EXPECT_EQ(50, temp->)
-// }
+TEST_F(TemperatureT, TestVar)
+{
+    // temperature->set_temperature(70);
+    EXPECT_EQ(temperature->get_nbsections(), 8);
+    EXPECT_EQ(temperature->get_sections().size(), 8);
+    EXPECT_TRUE(temperature->get_layout() != nullptr);
+    EXPECT_TRUE(temperature->get_mainlayout() != nullptr);
+    EXPECT_TRUE(temperature->get_label() != nullptr);
+}
