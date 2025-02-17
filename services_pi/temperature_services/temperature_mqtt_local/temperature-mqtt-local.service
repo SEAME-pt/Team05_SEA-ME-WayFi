@@ -1,0 +1,15 @@
+[Unit]
+Description=Service to publish Raspberry Pi temperature to MQTT broker
+Requires=mosquitto.service
+After=mosquitto.service
+PartOf=mosquitto.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/temperature_mqtt_local
+Restart=always
+RestartSec=5
+User=jetracer
+
+[Install]
+WantedBy=multi-user.target
