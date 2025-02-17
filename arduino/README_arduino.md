@@ -1,11 +1,11 @@
 ## CAN Communication: Raspberry Pi and Arduino
-This project demonstrates how to establish a **CAN (Controller Area Network)** communication between an **Arduino** and a **Raspberry Pi**. The Arduino reads speed data from a sensor, calculates the speed, and sends it to the Raspberry Pi over a CAN bus using an **MCP2515 CAN module**. The Raspberry Pi processes and displays the received data using Python.
+This project demonstrates how to establish a **CAN (Controller Area Network)** communication between an **Arduino** and a **Raspberry Pi**. The Arduino reads speed data from a sensor, calculates the speed, and sends it to the Raspberry Pi over a CAN bus using an **MCP2515 CAN module**. The Raspberry Pi processes and publish in a mqtt broker.
 
 
 <h1>Overview</h1>
 Controller Area Network (CAN) is a robust communication protocol commonly used in automotive and industrial applications. This project involves:
   Using an Arduino to send speed data via a CAN bus.
-  Configuring a Raspberry Pi to receive and process the data using Python.
+  Configuring a Raspberry Pi to receive and process the data.
 
 ## Hardware Requirements
 - **Arduino Uno/Nano/Mega** or similar.
@@ -32,9 +32,9 @@ Controller Area Network (CAN) is a robust communication protocol commonly used i
 ## Setup and Configuration
 
 ### Arduino Setup
-1. Install the **MCP_CAN** library in the Arduino IDE:
+1. Install the **MCP_CAN(CAN_BUS_Shield)** library in the Arduino IDE:
    - Go to **Sketch > Include Library > Manage Libraries**.
-   - Search for `MCP_CAN`, CAN-BUS Shield and install it.
+   - Search for `MCP_CAN(CAN_BUS_Shield by Seeed Studio)`, CAN-BUS Shield and install it.
 
 2. Upload the Arduino code (provided in the [Arduino Code](#arduino-code) section).
 
